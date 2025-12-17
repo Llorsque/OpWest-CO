@@ -1,0 +1,30 @@
+[
+  {
+    "id": "vv-oerterp",
+    "naam": "VV Oerterp",
+    "sport": "Voetbal",
+    "gemeente": "Opsterland",
+    "contacten": [
+      {
+        "rol": "Voorzitter",
+        "naam": "Onbekend",
+        "email": "",
+        "telefoon": ""
+      }
+    ]
+  },
+  {
+    "id": "stc-voorbeeld",
+    "naam": "Shorttrack Club Voorbeeld",
+    "sport": "Shorttrack",
+    "gemeente": "Weststellingwerf",
+    "contacten": [
+      {
+        "rol": "Secretaris",
+        "naam": "Onbekend",
+        "email": "",
+        "telefoon": ""
+      }
+    ]
+  }
+]

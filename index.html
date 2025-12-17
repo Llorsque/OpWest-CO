@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Overdracht | Sportverenigingen</title>
+  <meta name="description" content="Interne overdrachtstool: verenigingen, contactpersonen, projecten en documenten." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand__mark" aria-hidden="true">
+          <span class="dot"></span>
+          <span class="ring"></span>
+        </div>
+        <div class="brand__text">
+          <div class="brand__title">Overdracht</div>
+          <div class="brand__subtitle">Sportverenigingen</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Modules">
+        <a class="nav__item" href="#/">
+          <span class="nav__icon" aria-hidden="true">🏁</span>
+          <span>Landing</span>
+        </a>
+        <a class="nav__item" href="#/verenigingen">
+          <span class="nav__icon" aria-hidden="true">👥</span>
+          <span>Verenigingen</span>
+        </a>
+        <a class="nav__item" href="#/projecten">
+          <span class="nav__icon" aria-hidden="true">🧩</span>
+          <span>Lopende projecten</span>
+        </a>
+        <a class="nav__item" href="#/aankomend">
+          <span class="nav__icon" aria-hidden="true">🗓️</span>
+          <span>Aankomende zaken</span>
+        </a>
+        <a class="nav__item" href="#/gemeente">
+          <span class="nav__icon" aria-hidden="true">🏛️</span>
+          <span>Gemeentelijke info</span>
+        </a>
+        <a class="nav__item" href="#/activiteiten">
+          <span class="nav__icon" aria-hidden="true">📌</span>
+          <span>Activiteitenplan</span>
+        </a>
+        <a class="nav__item" href="#/resources">
+          <span class="nav__icon" aria-hidden="true">📁</span>
+          <span>Documenten & contacten</span>
+        </a>
+      </nav>
+
+      <div class="sidebar__footer">
+        <div class="chip" title="Alles lokaal: data en notities blijven in je browser (localStorage).">
+          <span class="chip__dot"></span>
+          <span class="chip__text">Local-first</span>
+        </div>
+        <div class="sidebar__hint">
+          Tip: Voeg “wat speelt er?” per vereniging toe bij <strong>Verenigingen</strong>.
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar__left">
+          <button class="iconbtn" id="btnToggleSidebar" aria-label="Menu">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <div class="crumbs">
+            <div class="crumbs__title" id="crumbTitle">Landing</div>
+            <div class="crumbs__meta" id="crumbMeta">Welkom — kies een module</div>
+          </div>
+        </div>
+        <div class="topbar__right">
+          <button class="btn btn--ghost" id="btnExport" title="Exporteer jouw aanvullingen (notities + eigen verenigingen) als JSON">
+            Export
+          </button>
+          <label class="btn btn--ghost filelabel" title="Importeer een export JSON (overschrijft jouw lokale data)">
+            Import
+            <input type="file" id="fileImport" accept="application/json" hidden />
+          </label>
+          <button class="btn" id="btnReset" title="Reset lokale aanvullingen (alleen jouw browser)">
+            Reset lokaal
+          </button>
+        </div>
+      </header>
+
+      <section class="content" id="view"></section>
+
+      <footer class="footer">
+        <div>Versie <span id="version">0.1.0</span> • <span id="today"></span></div>
+        <div class="footer__right">
+          <span class="muted">High-end UI • Modulair • GitHub-ready</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
