@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Projecten • Overdracht Tool</title>
+  <link rel="stylesheet" href="./projecten.css" />
+</head>
+<body class="page">
+  <header class="topbar">
+    <div class="titleblock">
+      <h1>Actuele lopende projecten</h1>
+      <p>Voeg projecten toe, werk ze bij en bewaar alles lokaal (incl. export/import voor overdracht).</p>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="btnAdd">+ Nieuw project</button>
+      <button class="btn btn-ghost" id="btnExport">Export</button>
+      <label class="btn btn-ghost filebtn">
+        Import
+        <input type="file" id="fileImport" accept="application/json" />
+      </label>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="panel">
+      <div class="panelbar">
+        <div class="searchwrap">
+          <input id="q" class="input" type="search" placeholder="Zoek op titel, eigenaar, status..." autocomplete="off" />
+        </div>
+
+        <div class="filters">
+          <select id="statusFilter" class="select" aria-label="Status filter">
+            <option value="">Alle statussen</option>
+            <option>Nieuw</option>
+            <option>Lopend</option>
+            <option>On hold</option>
+            <option>Afgerond</option>
+          </select>
+          <select id="sortBy" class="select" aria-label="Sorteren">
+            <option value="updated_desc">Laatst bijgewerkt (nieuw → oud)</option>
+            <option value="updated_asc">Laatst bijgewerkt (oud → nieuw)</option>
+            <option value="start_desc">Startdatum (nieuw → oud)</option>
+            <option value="start_asc">Startdatum (oud → nieuw)</option>
+            <option value="title_asc">Titel (A → Z)</option>
+            <option value="title_desc">Titel (Z → A)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tablewrap">
+        <table class="table" id="tbl">
+          <thead>
+            <tr>
+              <th>Titel</th>
+              <th>Status</th>
+              <th>Eigenaar</th>
+              <th>Start</th>
+              <th>Deadline</th>
+              <th>Laatst bijgewerkt</th>
+              <th class="right">Acties</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <!-- rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" id="empty" hidden>
+        <div class="emptycard">
+          <h3>Nog geen projecten</h3>
+          <p>Maak je eerste project aan, of importeer een exportbestand van je collega.</p>
+          <button class="btn" id="btnAdd2">+ Nieuw project</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="backdrop" data-close="1"></div>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+      <div class="dlgHead">
+        <h2 id="dlgTitle">Project</h2>
+        <button class="iconbtn" id="btnClose" aria-label="Sluiten">×</button>
+      </div>
+
+      <form id="form" class="form">
+        <div class="grid">
+          <div class="field">
+            <label for="title">Titel *</label>
+            <input id="title" class="input" required maxlength="120" />
+          </div>
+
+          <div class="field">
+            <label for="status">Status</label>
+            <select id="status" class="select">
+              <option>Nieuw</option>
+              <option selected>Lopend</option>
+              <option>On hold</option>
+              <option>Afgerond</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="owner">Eigenaar / contact</label>
+            <input id="owner" class="input" maxlength="120" placeholder="Bijv. jij / collega / beleidsmedewerker" />
+          </div>
+
+          <div class="field">
+            <label for="gemeente">Gemeente / context</label>
+            <input id="gemeente" class="input" maxlength="120" placeholder="Bijv. Opsterland / Weststellingwerf" />
+          </div>
+
+          <div class="field">
+            <label for="start">Startdatum</label>
+            <input id="start" class="input" type="date" />
+          </div>
+
+          <div class="field">
+            <label for="deadline">Deadline</label>
+            <input id="deadline" class="input" type="date" />
+          </div>
+
+          <div class="field col2">
+            <label for="desc">Omschrijving / notities</label>
+            <textarea id="desc" class="textarea" rows="6" placeholder="Wat is het doel, wat loopt er, wat is de volgende stap?"></textarea>
+          </div>
+        </div>
+
+        <div class="dlgFoot">
+          <div class="meta" id="meta"></div>
+          <div class="footActions">
+            <button type="button" class="btn btn-ghost" id="btnDelete" hidden>Verwijderen</button>
+            <button type="button" class="btn btn-ghost" data-close="1">Annuleren</button>
+            <button type="submit" class="btn btn-primary" id="btnSave">Opslaan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="./projecten.js"></script>
+</body>
+</html>
