@@ -34,6 +34,13 @@
     btnDelete: document.getElementById("btnDelete"),
     meta: document.getElementById("meta"),
 
+  detailsModal: document.getElementById("detailsModal"),
+  detailsTitle: document.getElementById("detailsTitle"),
+  detailsMeta: document.getElementById("detailsMeta"),
+  detailsFootMeta: document.getElementById("detailsFootMeta"),
+  detailsBody: document.getElementById("detailsBody"),
+  btnDetailsEdit: document.getElementById("btnDetailsEdit"),
+
     f_title: document.getElementById("title"),
     f_status: document.getElementById("status"),
     f_owner: document.getElementById("owner"),
@@ -140,6 +147,10 @@
 
     if(arr.length === 0){
       const tr = document.createElement("tr");
+      tr.dataset.open = p.id;
+      tr.tabIndex = 0;
+      tr.setAttribute("role","button");
+      tr.setAttribute("aria-label", `Open project ${p.title || ""}`);
       tr.innerHTML = `<td colspan="7" style="padding:18px 14px; color:rgba(255,255,255,.65)">Geen resultaten voor je filter/zoekopdracht.</td>`;
       els.tbody.appendChild(tr);
       return;
@@ -147,6 +158,10 @@
 
     for(const p of arr){
       const tr = document.createElement("tr");
+      tr.dataset.open = p.id;
+      tr.tabIndex = 0;
+      tr.setAttribute("role","button");
+      tr.setAttribute("aria-label", `Open project ${p.title || ""}`);
       tr.innerHTML = `
         <td>
           <div style="font-weight:700">${escapeHtml(p.title || "")}</div>
@@ -178,6 +193,8 @@
 
   // ---------- Modal ----------
   function openModal(p){
+    // if we were in detail view, hide it while editing
+    if(els.detailsModal?.classList.contains("open")) closeDetails();
     editing = p || null;
 
     els.modal.classList.add("open");
@@ -212,6 +229,12 @@
     els.modal.classList.remove("open");
     els.modal.setAttribute("aria-hidden","true");
     editing = null;
+
+    if(reopenDetailsId){
+      const id = reopenDetailsId;
+      reopenDetailsId = null;
+      openDetails(id);
+    }
   }
 
   // ---------- CRUD ----------
@@ -360,11 +383,30 @@
       const p = projects.find(x => x.id === editId);
       if(p) openModal(p);
       return;
+      return;
+    }
+
+    // open details when clicking a row (but not the action button)
+    const row = t && t.closest && t.closest("tr[data-open]");
+    if(row && row.dataset && row.dataset.open){
+      openDetails(row.dataset.open);
+      return;
     }
   });
 
   els.btnClose?.addEventListener("click", closeModal);
-  els.btnAdd?.addEventListener("click", ()=> openModal(null));
+  
+  // keyboard: open details from focused row
+  els.tbody?.addEventListener("keydown", (e)=> {
+    const key = e.key;
+    if(key !== "Enter" && key !== " ") return;
+    const row = e.target && e.target.closest && e.target.closest("tr[data-open]");
+    if(!row) return;
+    e.preventDefault();
+    openDetails(row.dataset.open);
+  });
+
+els.btnAdd?.addEventListener("click", ()=> openModal(null));
   els.btnAdd2?.addEventListener("click", ()=> openModal(null));
 
   els.form?.addEventListener("submit", (e)=> {
@@ -373,6 +415,24 @@
   });
 
   els.btnDelete?.addEventListener("click", deleteEditing);
+
+  // details modal: close by backdrop/button
+  document.addEventListener("click", (e)=> {
+    const t = e.target;
+    if(t && (t.dataset?.closeDetails || t.closest?.("[data-close-details]"))){
+      closeDetails();
+    }
+  });
+
+  // Edit from details
+  els.btnDetailsEdit?.addEventListener("click", ()=> {
+    if(!detailId) return;
+    const p = projects.find(x => x.id === detailId);
+    if(!p) return;
+    reopenDetailsId = detailId;
+    openModal(p);
+  });
+
 
   // filters
   const rerender = ()=> render();
@@ -389,3 +449,41 @@
   // init
   render();
 })();
+  function openDetails(id){
+    const p = projects.find(x => x.id === id);
+    if(!p) return;
+    detailId = id;
+
+    // Header
+    els.detailsTitle.textContent = p.title || "Project";
+    els.detailsMeta.innerHTML = `<span class="badge"><span class="dot ${statusDot(p.status)}"></span>${escapeHtml(p.status)}</span>`;
+
+    // Body
+    const desc = (p.desc || "").trim();
+    els.detailsBody.innerHTML = `
+      <div class="detailsGrid">
+        <div class="kv"><div class="k">Eigenaar / contact</div><div class="v">${escapeHtml(p.owner || "—")}</div></div>
+        <div class="kv"><div class="k">Gemeente / context</div><div class="v">${escapeHtml(p.gemeente || "—")}</div></div>
+        <div class="kv"><div class="k">Startdatum</div><div class="v">${fmtDate(p.start)}</div></div>
+        <div class="kv"><div class="k">Deadline</div><div class="v">${fmtDate(p.deadline)}</div></div>
+      </div>
+      <div class="kv">
+        <div class="k">Omschrijving / notities</div>
+        <div class="detailsText">${escapeHtml(desc || "—")}</div>
+      </div>
+    `;
+
+    // Footer meta
+    els.detailsFootMeta.textContent = `Aangemaakt: ${fmtTime(p.createdAt)} • Laatst bijgewerkt: ${fmtTime(p.updatedAt)}`;
+
+    els.detailsModal.classList.add("open");
+    els.detailsModal.setAttribute("aria-hidden","false");
+  }
+
+  function closeDetails(){
+    detailId = null;
+    els.detailsModal.classList.remove("open");
+    els.detailsModal.setAttribute("aria-hidden","true");
+  }
+
+

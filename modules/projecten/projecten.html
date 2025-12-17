@@ -10,7 +10,7 @@
   <header class="topbar">
     <div class="titleblock">
       <h1>Actuele lopende projecten</h1>
-      <p>Voeg projecten toe, werk ze bij en bewaar alles lokaal (incl. export/import voor overdracht).</p>
+      <p>Voeg projecten toe, werk ze bij en bewaar alles lokaal (incl. export/import voor overdracht). Klik op een project om de inhoud te openen.</p>
     </div>
 
     <div class="actions">
@@ -79,7 +79,32 @@
   </main>
 
   <!-- Modal -->
-  <div class="modal" id="modal" aria-hidden="true">
+  
+  <!-- Detailweergave (klik op een project) -->
+  <div class="modal" id="detailsModal" aria-hidden="true">
+    <div class="backdrop" data-close-details="1"></div>
+    <div class="dialog dialog--details" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
+      <div class="dlgHead">
+        <div>
+          <h2 id="detailsTitle">Project</h2>
+          <div class="meta" id="detailsMeta"></div>
+        </div>
+        <button class="iconbtn" type="button" aria-label="Sluiten" data-close-details="1">×</button>
+      </div>
+
+      <div class="detailsBody" id="detailsBody"><!-- filled by JS --></div>
+
+      <div class="dlgFoot">
+        <div class="meta" id="detailsFootMeta"></div>
+        <div class="footActions">
+          <button type="button" class="btn btn-ghost" id="btnDetailsEdit">Aanpassen</button>
+          <button type="button" class="btn btn-primary" data-close-details="1">Sluiten</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="modal" id="modal" aria-hidden="true">
     <div class="backdrop" data-close="1"></div>
     <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
       <div class="dlgHead">
