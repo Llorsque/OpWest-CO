@@ -54,6 +54,11 @@
   let projects = load();
   /** @type {Project|null} */
   let editing = null;
+  /** @type {string|null} */
+  let detailId = null;
+  /** @type {string|null} */
+  let reopenDetailsId = null;
+
 
   // ---------- Storage ----------
   function load(){
@@ -147,10 +152,6 @@
 
     if(arr.length === 0){
       const tr = document.createElement("tr");
-      tr.dataset.open = p.id;
-      tr.tabIndex = 0;
-      tr.setAttribute("role","button");
-      tr.setAttribute("aria-label", `Open project ${p.title || ""}`);
       tr.innerHTML = `<td colspan="7" style="padding:18px 14px; color:rgba(255,255,255,.65)">Geen resultaten voor je filter/zoekopdracht.</td>`;
       els.tbody.appendChild(tr);
       return;
@@ -362,8 +363,69 @@
       els.fileImport.value = "";
     }
   }
+  function openDetails(id){
+    const p = projects.find(x => x.id === id);
+    if(!p) return;
+    detailId = id;
 
-  // ---------- Events ----------
+    // Fallback: als de detailmodal niet aanwezig is in deze build, toon minimaal een alert.
+    if(!els.detailsModal || !els.detailsTitle || !els.detailsBody){
+      const lines = [
+        `Project: ${p.title || ""}`,
+        `Status: ${p.status || ""}`,
+        `Eigenaar: ${p.owner || "—"}`,
+        `Gemeente: ${p.gemeente || "—"}`,
+        `Start: ${p.start || "—"}`,
+        `Deadline: ${p.deadline || "—"}`,
+        "",
+        (p.desc || "").trim() || "—"
+      ];
+      alert(lines.join("
+"));
+      return;
+    }
+
+    // Header
+    els.detailsTitle.textContent = p.title || "Project";
+    if(els.detailsMeta){
+      els.detailsMeta.innerHTML = `<span class="badge"><span class="dot ${statusDot(p.status)}"></span>${escapeHtml(p.status)}</span>`;
+    }
+
+    // Body
+    const desc = (p.desc || "").trim();
+    if(els.detailsBody){
+      els.detailsBody.innerHTML = `
+        <div class="detailsGrid">
+          <div class="kv"><div class="k">Eigenaar / contact</div><div class="v">${escapeHtml(p.owner || "—")}</div></div>
+          <div class="kv"><div class="k">Gemeente / context</div><div class="v">${escapeHtml(p.gemeente || "—")}</div></div>
+          <div class="kv"><div class="k">Startdatum</div><div class="v">${fmtDate(p.start)}</div></div>
+          <div class="kv"><div class="k">Deadline</div><div class="v">${fmtDate(p.deadline)}</div></div>
+        </div>
+        <div class="kv">
+          <div class="k">Omschrijving / notities</div>
+          <div class="detailsText">${escapeHtml(desc || "—")}</div>
+        </div>
+      `;
+    }
+
+    // Footer meta
+    if(els.detailsFootMeta){
+      els.detailsFootMeta.textContent = `Aangemaakt: ${fmtTime(p.createdAt)} • Laatst bijgewerkt: ${fmtTime(p.updatedAt)}`;
+    }
+
+    els.detailsModal.classList.add("open");
+    els.detailsModal.setAttribute("aria-hidden","false");
+  }
+  function closeDetails(){
+    detailId = null;
+    if(!els.detailsModal) return;
+    els.detailsModal.classList.remove("open");
+    els.detailsModal.setAttribute("aria-hidden","true");
+  }
+
+
+
+// ---------- Events ----------
   document.addEventListener("click", (e) => {
     const t = e.target;
 
@@ -382,7 +444,6 @@
     if(editId){
       const p = projects.find(x => x.id === editId);
       if(p) openModal(p);
-      return;
       return;
     }
 
@@ -449,41 +510,3 @@ els.btnAdd?.addEventListener("click", ()=> openModal(null));
   // init
   render();
 })();
-  function openDetails(id){
-    const p = projects.find(x => x.id === id);
-    if(!p) return;
-    detailId = id;
-
-    // Header
-    els.detailsTitle.textContent = p.title || "Project";
-    els.detailsMeta.innerHTML = `<span class="badge"><span class="dot ${statusDot(p.status)}"></span>${escapeHtml(p.status)}</span>`;
-
-    // Body
-    const desc = (p.desc || "").trim();
-    els.detailsBody.innerHTML = `
-      <div class="detailsGrid">
-        <div class="kv"><div class="k">Eigenaar / contact</div><div class="v">${escapeHtml(p.owner || "—")}</div></div>
-        <div class="kv"><div class="k">Gemeente / context</div><div class="v">${escapeHtml(p.gemeente || "—")}</div></div>
-        <div class="kv"><div class="k">Startdatum</div><div class="v">${fmtDate(p.start)}</div></div>
-        <div class="kv"><div class="k">Deadline</div><div class="v">${fmtDate(p.deadline)}</div></div>
-      </div>
-      <div class="kv">
-        <div class="k">Omschrijving / notities</div>
-        <div class="detailsText">${escapeHtml(desc || "—")}</div>
-      </div>
-    `;
-
-    // Footer meta
-    els.detailsFootMeta.textContent = `Aangemaakt: ${fmtTime(p.createdAt)} • Laatst bijgewerkt: ${fmtTime(p.updatedAt)}`;
-
-    els.detailsModal.classList.add("open");
-    els.detailsModal.setAttribute("aria-hidden","false");
-  }
-
-  function closeDetails(){
-    detailId = null;
-    els.detailsModal.classList.remove("open");
-    els.detailsModal.setAttribute("aria-hidden","true");
-  }
-
-
