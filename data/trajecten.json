@@ -9,7 +9,12 @@
     "verwachtEinde": "",
     "status": "Lopend",
     "coach": "Jan Dupon",
-    "log": []
+    "log": [
+      {
+        "datum": "2026-02-18",
+        "tekst": "Traject gestart"
+      }
+    ]
   },
   {
     "id": "trj-d10c34fa-19c714118b9",
