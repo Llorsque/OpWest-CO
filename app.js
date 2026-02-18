@@ -1,5 +1,6 @@
 import { qs, qsa, toast, APP_VERSION } from "./shared/utils.js";
 import { isAdmin, loadData } from "./shared/github.js";
+import { isLoggedIn, isAdminUser, getUserName, logout, renderLoginScreen, bindLoginScreen } from "./shared/login.js";
 import * as Landing      from "./modules/landing.js";
 import * as Verenigingen from "./modules/verenigingen/index.js";
 import * as Trajecten    from "./modules/trajecten/index.js";
@@ -24,6 +25,7 @@ const ROUTES = {
 
 const state = {
   isAdmin: false,
+  userName: "",
   ui: {
     q: "",
     selectedId: null,
@@ -34,7 +36,6 @@ const state = {
     showAddTraject: false,
     selectedTrajectId: null
   },
-  // Data (loaded from JSON files in data/)
   verenigingen: [],
   trajecten: [],
   projecten: [],
@@ -42,26 +43,53 @@ const state = {
   gemeente: {},
   activiteiten: [],
   resources: {},
-  // Re-render function
   rerender: () => {}
 };
 
+/* ── Boot ──────────────────────────────────── */
+
 async function boot(){
+  if(!isLoggedIn()){
+    showLoginScreen();
+    return;
+  }
+  startApp();
+}
+
+function showLoginScreen(){
+  document.body.innerHTML = renderLoginScreen();
+  bindLoginScreen(() => {
+    location.reload();
+  });
+}
+
+async function startApp(){
   qs("#version").textContent = APP_VERSION;
   qs("#today").textContent = new Date().toLocaleDateString("nl-NL", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
   });
 
-  // Check admin status
-  state.isAdmin = isAdmin();
+  // Admin = admin user + GitHub token configured
+  state.isAdmin = isAdminUser() && isAdmin();
+  state.userName = getUserName();
   updateAdminBadge();
+  updateUserBadge();
 
-  // Load all data from JSON files
+  // Hide Instellingen for non-admin users
+  const settingsLink = qs("a[href='#/instellingen']");
+  if(settingsLink && !isAdminUser()){
+    settingsLink.style.display = "none";
+  }
+
   await loadAllData();
 
-  // Sidebar toggle
   qs("#btnToggleSidebar")?.addEventListener("click", () => {
     qs(".sidebar")?.classList.toggle("collapsed");
+  });
+
+  qs("#btnLogout")?.addEventListener("click", () => {
+    logout();
+    location.reload();
   });
 
   window.addEventListener("hashchange", renderRoute);
@@ -89,7 +117,6 @@ async function loadAllData(){
 }
 
 function updateAdminBadge(){
-  state.isAdmin = isAdmin();
   const el = qs("#adminBadge");
   if(!el) return;
   if(state.isAdmin){
@@ -98,6 +125,12 @@ function updateAdminBadge(){
         <span class="chip__dot chip__dot--green"></span>
         <span class="chip__text">Admin (bewerkbaar)</span>
       </div>`;
+  } else if(isAdminUser()){
+    el.innerHTML = `
+      <div class="chip chip--admin">
+        <span class="chip__dot chip__dot--yellow"></span>
+        <span class="chip__text">Admin (geen GitHub-token)</span>
+      </div>`;
   } else {
     el.innerHTML = `
       <div class="chip">
@@ -105,6 +138,20 @@ function updateAdminBadge(){
         <span class="chip__text">Alleen-lezen</span>
       </div>`;
   }
+}
+
+function updateUserBadge(){
+  const el = qs("#userBadge");
+  if(!el) return;
+  el.innerHTML = `
+    <div class="user-badge">
+      <div class="user-badge__avatar">${state.userName.charAt(0).toUpperCase()}</div>
+      <div class="user-badge__info">
+        <div class="user-badge__name">${state.userName}</div>
+        <div class="user-badge__role">${isAdminUser() ? "Admin" : "Viewer"}</div>
+      </div>
+    </div>
+  `;
 }
 
 function getRoute(){
@@ -125,20 +172,17 @@ async function renderRoute(){
   const route = getRoute();
   setActiveNav(route);
 
-  // Update admin status
-  state.isAdmin = isAdmin();
+  state.isAdmin = isAdminUser() && isAdmin();
   updateAdminBadge();
 
   const mod = ROUTES[route];
 
-  // Reset per-route UI flags
   if(route !== "/verenigingen"){ state.ui.q = ""; state.ui.selectedId = null; state.ui.showAdd = false; }
   if(route !== "/projecten")    state.ui.showAddProject = false;
   if(route !== "/aankomend")    state.ui.showAddUpcoming = false;
   if(route !== "/activiteiten") state.ui.showAddAct = false;
   if(route !== "/trajecten"){   state.ui.showAddTraject = false; state.ui.selectedTrajectId = null; }
 
-  // Hydrate (optional per-module setup)
   try { mod?.hydrate?.(state); } catch(e){ /* ignore */ }
 
   const meta = mod?.meta?.() || { title: "Module", meta: "" };
@@ -149,7 +193,6 @@ async function renderRoute(){
   const view = qs("#view");
   view.innerHTML = html;
 
-  // Bind events
   try { mod?.bind?.(state, view); } catch(e){
     console.error(e);
     toast("Er ging iets mis bij het binden van events.");
