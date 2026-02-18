@@ -1,5 +1,17 @@
 [
   {
+    "id": "trj-a7bef424-19c7142e037",
+    "verenigingId": "",
+    "verenigingNaam": "VWC",
+    "type": "Anders",
+    "omschrijving": "CKC traject voor VWC Munnekeburen",
+    "startDatum": "",
+    "verwachtEinde": "",
+    "status": "Lopend",
+    "coach": "Jan Dupon",
+    "log": []
+  },
+  {
     "id": "trj-d10c34fa-19c714118b9",
     "verenigingId": "vv-oerterp",
     "verenigingNaam": "VV Oerterp",
