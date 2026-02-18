@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Overdracht | Sportverenigingen</title>
-  <meta name="description" content="Interne overdrachtstool: verenigingen, contactpersonen, projecten en documenten." />
+  <meta name="description" content="Interne overdrachtstool: verenigingen, trajecten, projecten en meer." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -27,11 +27,15 @@
       <nav class="nav" aria-label="Modules">
         <a class="nav__item" href="#/">
           <span class="nav__icon" aria-hidden="true">🏁</span>
-          <span>Landing</span>
+          <span>Dashboard</span>
         </a>
         <a class="nav__item" href="#/verenigingen">
           <span class="nav__icon" aria-hidden="true">👥</span>
           <span>Verenigingen</span>
+        </a>
+        <a class="nav__item" href="#/trajecten">
+          <span class="nav__icon" aria-hidden="true">🎯</span>
+          <span>Trajecten</span>
         </a>
         <a class="nav__item" href="#/projecten">
           <span class="nav__icon" aria-hidden="true">🧩</span>
@@ -56,13 +60,11 @@
       </nav>
 
       <div class="sidebar__footer">
-        <div class="chip" title="Alles lokaal: data en notities blijven in je browser (localStorage).">
-          <span class="chip__dot"></span>
-          <span class="chip__text">Local-first</span>
-        </div>
-        <div class="sidebar__hint">
-          Tip: Voeg “wat speelt er?” per vereniging toe bij <strong>Verenigingen</strong>.
-        </div>
+        <div id="adminBadge"></div>
+        <a class="nav__item nav__item--settings" href="#/instellingen">
+          <span class="nav__icon" aria-hidden="true">⚙️</span>
+          <span>Instellingen</span>
+        </a>
       </div>
     </aside>
 
@@ -73,30 +75,21 @@
             <span aria-hidden="true">☰</span>
           </button>
           <div class="crumbs">
-            <div class="crumbs__title" id="crumbTitle">Landing</div>
+            <div class="crumbs__title" id="crumbTitle">Dashboard</div>
             <div class="crumbs__meta" id="crumbMeta">Welkom — kies een module</div>
           </div>
         </div>
         <div class="topbar__right">
-          <button class="btn btn--ghost" id="btnExport" title="Exporteer jouw aanvullingen (notities + eigen verenigingen) als JSON">
-            Export
-          </button>
-          <label class="btn btn--ghost filelabel" title="Importeer een export JSON (overschrijft jouw lokale data)">
-            Import
-            <input type="file" id="fileImport" accept="application/json" hidden />
-          </label>
-          <button class="btn" id="btnReset" title="Reset lokale aanvullingen (alleen jouw browser)">
-            Reset lokaal
-          </button>
+          <div id="saveStatus"></div>
         </div>
       </header>
 
       <section class="content" id="view"></section>
 
       <footer class="footer">
-        <div>Versie <span id="version">0.1.0</span> • <span id="today"></span></div>
+        <div>Versie <span id="version">2.0.0</span> • <span id="today"></span></div>
         <div class="footer__right">
-          <span class="muted">High-end UI • Modulair • GitHub-ready</span>
+          <span class="muted">GitHub-synced • Modulair</span>
         </div>
       </footer>
     </main>

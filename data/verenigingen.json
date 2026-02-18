@@ -7,11 +7,12 @@
     "contacten": [
       {
         "rol": "Voorzitter",
-        "naam": "Onbekend",
+        "naam": "",
         "email": "",
         "telefoon": ""
       }
-    ]
+    ],
+    "notitie": ""
   },
   {
     "id": "stc-voorbeeld",
@@ -21,10 +22,11 @@
     "contacten": [
       {
         "rol": "Secretaris",
-        "naam": "Onbekend",
+        "naam": "",
         "email": "",
         "telefoon": ""
       }
-    ]
+    ],
+    "notitie": ""
   }
 ]

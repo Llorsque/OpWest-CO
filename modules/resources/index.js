@@ -1,43 +1,44 @@
-import { esc, readLS, writeLS, toast } from "../../shared/utils.js";
-
-const LS_RES = "ovt_resources_v1";
+import { esc, toast } from "../../shared/utils.js";
+import { saveData } from "../../shared/github.js";
 
 export function meta(){
-  return { title: "Documenten & contacten", meta: "Links, afspraken, vaste partners en tools (lokaal)" };
-}
-
-export function hydrate(state){
-  state.resources = readLS(LS_RES, state.resources || {
-    documenten: "",
-    partners: "",
-    tools: ""
-  });
+  return { title: "Documenten & contacten", meta: "Links, partners en tools" };
 }
 
 export function render(state){
   const r = state.resources || {};
+  const admin = state.isAdmin;
   return `
     <div class="panel">
       <div class="panel__header">
         <div>
           <div class="panel__title">Documenten & contacten</div>
-          <div class="muted" style="font-size:12px;margin-top:4px;">Alles wat ‘los’ is, maar wél cruciaal voor overdracht.</div>
+          <div class="muted" style="font-size:12px;margin-top:4px;">Alles wat cruciaal is voor overdracht maar nergens anders past.</div>
         </div>
-        <button class="btn" id="btnSave">Opslaan</button>
+        ${admin ? `<button class="btn btn--save" id="btnSaveGitHub">Opslaan naar GitHub</button>` : ""}
       </div>
       <div class="panel__body">
-        <div class="grid">
+        <div class="grid" style="gap:16px;">
           <div>
-            <div class="muted" style="font-size:12px;margin-bottom:6px;">Documenten (links/locaties)</div>
-            <textarea class="textarea" id="rDocs" placeholder="SharePoint mappen, templates, handleidingen…">${esc(r.documenten||"")}</textarea>
+            <div class="label">Documenten (links/locaties)</div>
+            ${admin
+              ? `<textarea class="textarea" id="rDocs" placeholder="SharePoint mappen, templates, handleidingen…">${esc(r.documenten || "")}</textarea>`
+              : `<div class="readblock">${esc(r.documenten || "Niet ingevuld.")}</div>`
+            }
           </div>
           <div>
-            <div class="muted" style="font-size:12px;margin-bottom:6px;">Overige contacten (partners)</div>
-            <textarea class="textarea" id="rPartners" placeholder="Naam • organisatie • rol • e-mail/telefoon…">${esc(r.partners||"")}</textarea>
+            <div class="label">Overige contacten (partners)</div>
+            ${admin
+              ? `<textarea class="textarea" id="rPartners" placeholder="Naam • organisatie • rol • e-mail/telefoon…">${esc(r.partners || "")}</textarea>`
+              : `<div class="readblock">${esc(r.partners || "Niet ingevuld.")}</div>`
+            }
           </div>
           <div>
-            <div class="muted" style="font-size:12px;margin-bottom:6px;">Tools / accounts / toegang</div>
-            <textarea class="textarea" id="rTools" placeholder="GitHub repo’s, accounts, toegangsroutes, wachtwoordkluizen (geen wachtwoorden plakken)…">${esc(r.tools||"")}</textarea>
+            <div class="label">Tools / accounts / toegang</div>
+            ${admin
+              ? `<textarea class="textarea" id="rTools" placeholder="GitHub, accounts, toegangsroutes…">${esc(r.tools || "")}</textarea>`
+              : `<div class="readblock">${esc(r.tools || "Niet ingevuld.")}</div>`
+            }
           </div>
         </div>
       </div>
@@ -46,13 +47,18 @@ export function render(state){
 }
 
 export function bind(state, root){
-  root.querySelector("#btnSave")?.addEventListener("click", ()=>{
+  root.querySelector("#btnSaveGitHub")?.addEventListener("click", async () => {
     state.resources = {
-      documenten: root.querySelector("#rDocs")?.value || "",
-      partners: root.querySelector("#rPartners")?.value || "",
-      tools: root.querySelector("#rTools")?.value || ""
+      documenten: root.querySelector("#rDocs")?.value     || "",
+      partners:   root.querySelector("#rPartners")?.value || "",
+      tools:      root.querySelector("#rTools")?.value    || ""
     };
-    writeLS(LS_RES, state.resources);
-    toast("Opgeslagen.");
+    const btn = root.querySelector("#btnSaveGitHub");
+    btn.disabled = true; btn.textContent = "Bezig…";
+    try {
+      await saveData("resources.json", state.resources, "Update resources");
+      toast("✓ Opgeslagen naar GitHub!");
+    } catch(e){ toast("✗ Fout: " + e.message); }
+    btn.disabled = false; btn.textContent = "Opslaan naar GitHub";
   });
 }

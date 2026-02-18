@@ -1,79 +1,110 @@
-import { qs, qsa, toast, readLS, writeLS, downloadJson, readFileAsJson, APP_VERSION } from "./shared/utils.js";
-import * as Landing from "./modules/landing.js";
+import { qs, qsa, toast, APP_VERSION } from "./shared/utils.js";
+import { isAdmin, loadData } from "./shared/github.js";
+import * as Landing      from "./modules/landing.js";
 import * as Verenigingen from "./modules/verenigingen/index.js";
-import * as Projecten from "./modules/projecten/index.js";
-import * as Aankomend from "./modules/aankomend/index.js";
-import * as Gemeente from "./modules/gemeente/index.js";
+import * as Trajecten    from "./modules/trajecten/index.js";
+import * as Projecten    from "./modules/projecten/index.js";
+import * as Aankomend    from "./modules/aankomend/index.js";
+import * as Gemeente     from "./modules/gemeente/index.js";
 import * as Activiteiten from "./modules/activiteiten/index.js";
-import * as Resources from "./modules/resources/index.js";
+import * as Resources    from "./modules/resources/index.js";
+import * as Instellingen from "./modules/instellingen.js";
 
 const ROUTES = {
-  "/": Landing,
-  "/verenigingen": Verenigingen,
-  "/projecten": Projecten,
-  "/aankomend": Aankomend,
-  "/gemeente": Gemeente,
-  "/activiteiten": Activiteiten,
-  "/resources": Resources
+  "/":              Landing,
+  "/verenigingen":  Verenigingen,
+  "/trajecten":     Trajecten,
+  "/projecten":     Projecten,
+  "/aankomend":     Aankomend,
+  "/gemeente":      Gemeente,
+  "/activiteiten":  Activiteiten,
+  "/resources":     Resources,
+  "/instellingen":  Instellingen
 };
 
-const EXPORT_KEY = "ovt_bundle_export_v1"; // for reset quick lookup (optional)
-const LS_KEYS = [
-  "ovt_notes_v1",
-  "ovt_custom_clubs_v1",
-  "ovt_projects_v1",
-  "ovt_upcoming_v1",
-  "ovt_municipal_v1",
-  "ovt_activiteiten_v1",
-  "ovt_resources_v1"
-];
-
 const state = {
+  isAdmin: false,
   ui: {
     q: "",
     selectedId: null,
     showAdd: false,
     showAddProject: false,
     showAddUpcoming: false,
-    showAddAct: false
+    showAddAct: false,
+    showAddTraject: false,
+    selectedTrajectId: null
   },
+  // Data (loaded from JSON files in data/)
   verenigingen: [],
+  trajecten: [],
   projecten: [],
   aankomend: [],
-  gemeente: null,
+  gemeente: {},
   activiteiten: [],
-  resources: null,
-  notes: {},
-  customClubs: [],
+  resources: {},
+  // Re-render function
   rerender: () => {}
 };
 
 async function boot(){
   qs("#version").textContent = APP_VERSION;
-  qs("#today").textContent = new Date().toLocaleDateString("nl-NL", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+  qs("#today").textContent = new Date().toLocaleDateString("nl-NL", {
+    weekday: "long", year: "numeric", month: "long", day: "numeric"
+  });
 
-  // load initial repo data (verenigingen)
-  try{
-    const res = await fetch("./data/verenigingen.json", { cache: "no-store" });
-    state.verenigingen = await res.json();
-  }catch(e){
-    state.verenigingen = [];
-    toast("Kon verenigingen.json niet laden.");
-  }
+  // Check admin status
+  state.isAdmin = isAdmin();
+  updateAdminBadge();
 
-  // install global buttons
-  qs("#btnToggleSidebar")?.addEventListener("click", ()=>{
+  // Load all data from JSON files
+  await loadAllData();
+
+  // Sidebar toggle
+  qs("#btnToggleSidebar")?.addEventListener("click", () => {
     qs(".sidebar")?.classList.toggle("collapsed");
   });
 
-  qs("#btnExport")?.addEventListener("click", doExport);
-  qs("#fileImport")?.addEventListener("change", doImport);
-  qs("#btnReset")?.addEventListener("click", doReset);
-
   window.addEventListener("hashchange", renderRoute);
-
   state.rerender = renderRoute;
   renderRoute();
+}
+
+async function loadAllData(){
+  const [ver, trj, prj, aank, gem, act, res] = await Promise.all([
+    loadData("verenigingen.json", []),
+    loadData("trajecten.json",    []),
+    loadData("projecten.json",    []),
+    loadData("aankomend.json",    []),
+    loadData("gemeente.json",     { kaders: "", contacten: "", links: "" }),
+    loadData("activiteiten.json", []),
+    loadData("resources.json",    { documenten: "", partners: "", tools: "" })
+  ]);
+  state.verenigingen = ver  || [];
+  state.trajecten    = trj  || [];
+  state.projecten    = prj  || [];
+  state.aankomend    = aank || [];
+  state.gemeente     = gem  || {};
+  state.activiteiten = act  || [];
+  state.resources    = res  || {};
+}
+
+function updateAdminBadge(){
+  state.isAdmin = isAdmin();
+  const el = qs("#adminBadge");
+  if(!el) return;
+  if(state.isAdmin){
+    el.innerHTML = `
+      <div class="chip chip--admin">
+        <span class="chip__dot chip__dot--green"></span>
+        <span class="chip__text">Admin (bewerkbaar)</span>
+      </div>`;
+  } else {
+    el.innerHTML = `
+      <div class="chip">
+        <span class="chip__dot"></span>
+        <span class="chip__text">Alleen-lezen</span>
+      </div>`;
+  }
 }
 
 function getRoute(){
@@ -85,16 +116,7 @@ function getRoute(){
 
 function setActiveNav(route){
   qsa(".nav__item").forEach(a => a.classList.remove("is-active"));
-  const map = {
-    "/": "#/",
-    "/verenigingen": "#/verenigingen",
-    "/projecten": "#/projecten",
-    "/aankomend": "#/aankomend",
-    "/gemeente": "#/gemeente",
-    "/activiteiten": "#/activiteiten",
-    "/resources": "#/resources"
-  };
-  const href = map[route] || "#/";
+  const href = `#${route}`;
   const el = qsa(".nav__item").find(a => a.getAttribute("href") === href);
   el?.classList.add("is-active");
 }
@@ -103,90 +125,35 @@ async function renderRoute(){
   const route = getRoute();
   setActiveNav(route);
 
-  const mod = ROUTES[route];
-  // reset per-route UI flags (keep search + selected)
-  if(route !== "/verenigingen"){
-    state.ui.q = "";
-    state.ui.selectedId = null;
-    state.ui.showAdd = false;
-  }
-  if(route !== "/projecten") state.ui.showAddProject = false;
-  if(route !== "/aankomend") state.ui.showAddUpcoming = false;
-  if(route !== "/activiteiten") state.ui.showAddAct = false;
+  // Update admin status
+  state.isAdmin = isAdmin();
+  updateAdminBadge();
 
-  // hydrate (load local data)
-  try{
-    mod?.hydrate?.(state);
-  }catch(e){ /* ignore */ }
+  const mod = ROUTES[route];
+
+  // Reset per-route UI flags
+  if(route !== "/verenigingen"){ state.ui.q = ""; state.ui.selectedId = null; state.ui.showAdd = false; }
+  if(route !== "/projecten")    state.ui.showAddProject = false;
+  if(route !== "/aankomend")    state.ui.showAddUpcoming = false;
+  if(route !== "/activiteiten") state.ui.showAddAct = false;
+  if(route !== "/trajecten"){   state.ui.showAddTraject = false; state.ui.selectedTrajectId = null; }
+
+  // Hydrate (optional per-module setup)
+  try { mod?.hydrate?.(state); } catch(e){ /* ignore */ }
 
   const meta = mod?.meta?.() || { title: "Module", meta: "" };
   qs("#crumbTitle").textContent = meta.title;
-  qs("#crumbMeta").textContent = meta.meta || "";
+  qs("#crumbMeta").textContent  = meta.meta || "";
 
   const html = mod?.render?.(state) || `<div class="muted">Geen view.</div>`;
   const view = qs("#view");
   view.innerHTML = html;
 
-  // bind events
-  try{
-    mod?.bind?.(state, view);
-  }catch(e){
+  // Bind events
+  try { mod?.bind?.(state, view); } catch(e){
     console.error(e);
     toast("Er ging iets mis bij het binden van events.");
   }
-}
-
-function collectExportBundle(){
-  const bundle = {
-    schema: "overdracht-bundle/v1",
-    exportedAt: new Date().toISOString(),
-    appVersion: APP_VERSION,
-    data: {}
-  };
-  for(const k of LS_KEYS){
-    bundle.data[k] = readLS(k, null);
-  }
-  writeLS(EXPORT_KEY, bundle);
-  return bundle;
-}
-
-function doExport(){
-  const bundle = collectExportBundle();
-  const stamp = new Date().toISOString().slice(0,19).replaceAll(":","-");
-  downloadJson(`overdracht-export-${stamp}.json`, bundle);
-  toast("Export gedownload.");
-}
-
-async function doImport(e){
-  const file = e.target.files?.[0];
-  if(!file) return;
-  try{
-    const bundle = await readFileAsJson(file);
-    if(bundle?.schema !== "overdracht-bundle/v1"){
-      toast("Onbekend export-formaat.");
-      return;
-    }
-    const data = bundle.data || {};
-    for(const k of LS_KEYS){
-      if(k in data) writeLS(k, data[k]);
-    }
-    toast("Import klaar. Herlaad view…");
-    // reset input
-    e.target.value = "";
-    renderRoute();
-  }catch(err){
-    console.error(err);
-    toast("Import mislukt (geen geldige JSON?).");
-  }
-}
-
-function doReset(){
-  for(const k of LS_KEYS){
-    localStorage.removeItem(k);
-  }
-  localStorage.removeItem(EXPORT_KEY);
-  toast("Lokale data gereset.");
-  renderRoute();
 }
 
 boot();
