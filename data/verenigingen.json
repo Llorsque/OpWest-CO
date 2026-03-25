@@ -5,12 +5,7 @@
     "sport": "Voetbal",
     "gemeente": "Opsterland",
     "contacten": [
-      {
-        "rol": "Voorzitter",
-        "naam": "",
-        "email": "",
-        "telefoon": ""
-      }
+      { "rol": "Voorzitter", "naam": "", "email": "", "telefoon": "" }
     ],
     "notitie": ""
   },
@@ -20,12 +15,7 @@
     "sport": "Shorttrack",
     "gemeente": "Weststellingwerf",
     "contacten": [
-      {
-        "rol": "Secretaris",
-        "naam": "",
-        "email": "",
-        "telefoon": ""
-      }
+      { "rol": "Secretaris", "naam": "", "email": "", "telefoon": "" }
     ],
     "notitie": ""
   }

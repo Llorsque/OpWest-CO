@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Overdracht | Sportverenigingen</title>
-  <meta name="description" content="Interne overdrachtstool: verenigingen, trajecten, projecten en meer." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -14,91 +13,48 @@
   <div class="app" id="app">
     <aside class="sidebar">
       <div class="brand">
-        <div class="brand__mark" aria-hidden="true">
-          <span class="dot"></span>
-          <span class="ring"></span>
-        </div>
+        <div class="brand__mark" aria-hidden="true"><span class="dot"></span><span class="ring"></span></div>
         <div class="brand__text">
           <div class="brand__title">Overdracht</div>
           <div class="brand__subtitle">Sportverenigingen</div>
         </div>
       </div>
-
       <nav class="nav" aria-label="Modules">
-        <a class="nav__item" href="#/">
-          <span class="nav__icon" aria-hidden="true">🏁</span>
-          <span>Dashboard</span>
-        </a>
-        <a class="nav__item" href="#/verenigingen">
-          <span class="nav__icon" aria-hidden="true">👥</span>
-          <span>Verenigingen</span>
-        </a>
-        <a class="nav__item" href="#/trajecten">
-          <span class="nav__icon" aria-hidden="true">🎯</span>
-          <span>Trajecten</span>
-        </a>
-        <a class="nav__item" href="#/projecten">
-          <span class="nav__icon" aria-hidden="true">🧩</span>
-          <span>Lopende projecten</span>
-        </a>
-        <a class="nav__item" href="#/aankomend">
-          <span class="nav__icon" aria-hidden="true">🗓️</span>
-          <span>Aankomende zaken</span>
-        </a>
-        <a class="nav__item" href="#/gemeente">
-          <span class="nav__icon" aria-hidden="true">🏛️</span>
-          <span>Gemeentelijke info</span>
-        </a>
-        <a class="nav__item" href="#/activiteiten">
-          <span class="nav__icon" aria-hidden="true">📌</span>
-          <span>Activiteitenplan</span>
-        </a>
-        <a class="nav__item" href="#/resources">
-          <span class="nav__icon" aria-hidden="true">📁</span>
-          <span>Documenten & contacten</span>
-        </a>
+        <a class="nav__item" href="#/"><span class="nav__icon">🏁</span><span>Dashboard</span></a>
+        <a class="nav__item" href="#/verenigingen"><span class="nav__icon">👥</span><span>Verenigingen</span></a>
+        <a class="nav__item" href="#/trajecten"><span class="nav__icon">🎯</span><span>Trajecten</span></a>
+        <a class="nav__item" href="#/projecten"><span class="nav__icon">🧩</span><span>Lopende projecten</span></a>
+        <a class="nav__item" href="#/aankomend"><span class="nav__icon">🗓️</span><span>Aankomende zaken</span></a>
+        <a class="nav__item" href="#/gemeente"><span class="nav__icon">🏛️</span><span>Gemeente overzicht</span></a>
+        <a class="nav__item" href="#/activiteiten"><span class="nav__icon">📌</span><span>Activiteitenplan</span></a>
+        <a class="nav__item" href="#/resources"><span class="nav__icon">📁</span><span>Documenten & contacten</span></a>
       </nav>
-
       <div class="sidebar__footer">
         <div id="userBadge"></div>
         <div id="adminBadge"></div>
-        <a class="nav__item nav__item--settings" href="#/instellingen">
-          <span class="nav__icon" aria-hidden="true">⚙️</span>
-          <span>Instellingen</span>
-        </a>
+        <a class="nav__item nav__item--settings" href="#/instellingen"><span class="nav__icon">⚙️</span><span>Instellingen</span></a>
         <button class="btn btn--ghost btn--logout" id="btnLogout">Uitloggen</button>
       </div>
     </aside>
-
     <main class="main">
       <header class="topbar">
         <div class="topbar__left">
-          <button class="iconbtn" id="btnToggleSidebar" aria-label="Menu">
-            <span aria-hidden="true">☰</span>
-          </button>
+          <button class="iconbtn" id="btnToggleSidebar" aria-label="Menu"><span>☰</span></button>
           <div class="crumbs">
             <div class="crumbs__title" id="crumbTitle">Dashboard</div>
-            <div class="crumbs__meta" id="crumbMeta">Welkom — kies een module</div>
+            <div class="crumbs__meta" id="crumbMeta"></div>
           </div>
         </div>
-        <div class="topbar__right">
-          <div id="saveStatus"></div>
-        </div>
+        <div class="topbar__right"><div id="saveStatus"></div></div>
       </header>
-
       <section class="content" id="view"></section>
-
       <footer class="footer">
-        <div>Versie <span id="version">2.0.0</span> • <span id="today"></span></div>
-        <div class="footer__right">
-          <span class="muted">GitHub-synced • Modulair</span>
-        </div>
+        <div>Versie <span id="version">2.1.0</span> • <span id="today"></span></div>
+        <div class="footer__right"><span class="muted">GitHub-synced • Modulair</span></div>
       </footer>
     </main>
   </div>
-
-  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
-
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script type="module" src="./app.js"></script>
 </body>
 </html>
