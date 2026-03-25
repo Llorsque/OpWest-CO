@@ -22,7 +22,7 @@ export function renderLoginScreen(){
     <div class="login-form">
       <div style="margin-bottom:16px;"><label class="label">Gebruikersnaam</label><input class="input login-input" id="loginUser" placeholder="Gebruikersnaam" autocomplete="off"/></div>
       <div style="margin-bottom:20px;"><label class="label">Wachtwoord</label><input class="input login-input" id="loginPass" type="password" placeholder="Wachtwoord"/></div>
-      <div id="loginError" style="color:#f87171;font-size:13px;margin-bottom:12px;display:none;"></div>
+      <div id="loginError" style="color:var(--red);font-size:13px;margin-bottom:12px;display:none;"></div>
       <button class="btn btn--login" id="btnLogin">Inloggen</button>
     </div>
     <div class="login-footer"><span class="muted" style="font-size:11px;">Interne tool — Clubondersteuning OpWest</span></div>

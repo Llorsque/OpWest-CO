@@ -65,7 +65,7 @@ export function render(state){
           <div class="panel__body">
             ${recenteActies.length ? recenteActies.map(a => {
               const club = state.verenigingen.find(v => v.id === a.verenigingId);
-              return `<div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06);align-items:flex-start;">
+              return `<div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
                 <div style="font-size:11px;color:var(--accent);min-width:72px;">${formatDate(a.datum)}</div>
                 <div style="font-size:12px;flex:1;">
                   <strong>${esc(club?.naam || "Onbekend")}</strong> —
@@ -117,7 +117,7 @@ export function render(state){
           </div>
           <div class="panel__body">
             ${aankomend.length ? aankomend.map(x => `
-              <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);">
                 <div style="font-size:11px;color:var(--accent);min-width:72px;">${formatDate(x.datum)}</div>
                 <div style="font-size:12px;flex:1;"><strong>${esc(x.titel)}</strong>${x.betrokken ? ` — ${esc(x.betrokken)}` : ""}</div>
               </div>

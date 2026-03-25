@@ -40,8 +40,8 @@ export function bind(state,root){
     updateBadge(state);
     const el=root.querySelector("#testResult"); el.innerHTML=`<div class="muted" style="font-size:13px;">Testen...</div>`;
     const r=await validateToken();
-    if(r.ok)el.innerHTML=`<div style="color:#4ade80;font-size:13px;">Verbonden met <strong>${esc(r.repoName)}</strong>. Push: ${r.permissions?.push?"Ja":"Nee"}.</div>`;
-    else el.innerHTML=`<div style="color:#f87171;font-size:13px;">Fout: ${esc(r.error)}</div>`;
+    if(r.ok)el.innerHTML=`<div style="color:var(--green);font-size:13px;">Verbonden met <strong>${esc(r.repoName)}</strong>. Push: ${r.permissions?.push?"Ja":"Nee"}.</div>`;
+    else el.innerHTML=`<div style="color:var(--red);font-size:13px;">Fout: ${esc(r.error)}</div>`;
   });
   root.querySelector("#btnClearCfg")?.addEventListener("click",()=>{clearConfig();updateBadge(state);toast("Koppeling verwijderd.");state.rerender();});
 }
