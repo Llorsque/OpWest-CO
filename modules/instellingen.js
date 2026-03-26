@@ -1,47 +1,174 @@
-import { esc, toast } from "../shared/utils.js";
-import { getConfig, setConfig, clearConfig, validateToken, isAdmin } from "../shared/github.js";
+import { esc, toast, uid } from "../shared/utils.js";
+import { getConfig, setConfig, clearConfig, validateToken, isAdmin, saveData } from "../shared/github.js";
 
-export function meta(){ return { title:"Instellingen", meta:"GitHub-koppeling en admin-toegang" }; }
-
-function updateBadge(state){
-  state.isAdmin=isAdmin();
-  const el=document.querySelector("#adminBadge"); if(!el)return;
-  if(state.isAdmin)el.innerHTML=`<div class="chip chip--admin"><span class="chip__dot chip__dot--green"></span><span class="chip__text">Admin (bewerkbaar)</span></div>`;
-  else el.innerHTML=`<div class="chip"><span class="chip__dot"></span><span class="chip__text">Alleen-lezen</span></div>`;
-}
+export function meta(){ return { title:"Instellingen", meta:"GitHub, gebruikers en configuratie" }; }
 
 export function render(state){
   const cfg=getConfig(); const admin=isAdmin();
-  return `<div class="panel"><div class="panel__header"><div><div class="panel__title">GitHub-koppeling</div>
-    <div class="muted" style="font-size:12px;margin-top:4px;">Vul je GitHub-gegevens in om data te bewerken. Zonder token is de tool alleen-lezen.</div></div></div>
-    <div class="panel__body"><div class="grid" style="gap:14px;">
-      <div><label class="label">Repository (eigenaar/naam)</label><input class="input" id="cfgRepo" placeholder="bijv. username/OpWest-CO" value="${esc(cfg.repo)}"/>
-        <div class="muted" style="font-size:11px;margin-top:4px;">Exact zoals in de URL: github.com/<strong>eigenaar/repo</strong></div></div>
-      <div><label class="label">Branch</label><input class="input" id="cfgBranch" placeholder="main" value="${esc(cfg.branch||"main")}"/></div>
-      <div><label class="label">Personal Access Token</label><input class="input" id="cfgToken" type="password" placeholder="ghp_xxxxxxxxxxxx" value="${esc(cfg.token)}"/>
-        <div class="muted" style="font-size:11px;margin-top:4px;">Maak aan via <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--accent);">github.com/settings/tokens</a> -> Contents: Read and write.</div></div>
-      <div class="row" style="gap:10px;"><button class="btn" id="btnSaveCfg">Opslaan</button><button class="btn btn--ghost" id="btnTestCfg">Test verbinding</button>
-        ${admin?`<button class="btn btn--ghost btn--danger" id="btnClearCfg">Verwijder koppeling</button>`:""}</div>
+  const s = state.settings||{};
+  const accounts = s.accounts||[];
+  const types = s.trajectTypes||[];
+  const themas = s.themas||[];
+
+  return `
+    <!-- GitHub koppeling -->
+    <div class="panel"><div class="panel__header"><div class="panel__title">GitHub-koppeling</div></div>
+    <div class="panel__body"><div class="grid" style="gap:12px;">
+      <div class="row"><div style="flex:1;"><label class="label">Repository (eigenaar/naam)</label><input class="input" id="cfgRepo" placeholder="username/OpWest-CO" value="${esc(cfg.repo)}"/></div>
+        <div style="flex:0 0 140px;"><label class="label">Branch</label><input class="input" id="cfgBranch" placeholder="main" value="${esc(cfg.branch||"main")}"/></div></div>
+      <div><label class="label">Personal Access Token</label><input class="input" id="cfgToken" type="password" placeholder="ghp_xxxxxxxxxxxx" value="${esc(cfg.token)}"/></div>
+      <div class="row" style="gap:8px;"><button class="btn" id="btnSaveCfg">Opslaan</button><button class="btn btn--ghost" id="btnTestCfg">Test verbinding</button>
+        ${admin?`<button class="btn btn--danger" id="btnClearCfg">Verwijder koppeling</button>`:""}</div>
       <div id="testResult"></div>
     </div></div></div>
-    <div class="panel" style="margin-top:14px;"><div class="panel__header"><div class="panel__title">Hoe werkt het?</div></div>
-    <div class="panel__body"><div class="muted" style="font-size:13px;line-height:1.6;">
-      <strong>Admin (jij):</strong> Na het invullen kun je data bewerken. Klik <em>Opslaan</em> -> data wordt naar GitHub gecommit. Pages herlaadt (~30 sec).<br/><br/>
-      <strong>Collega (alleen-lezen):</strong> Opent dezelfde URL en ziet de laatste versie. Geen token nodig.</div></div></div>`;
+
+    <!-- Gebruikersbeheer -->
+    <div class="panel" style="margin-top:16px;"><div class="panel__header"><div class="panel__title">Gebruikers</div>
+      <button class="btn" id="btnAddUser">+ Gebruiker</button></div>
+    <div class="panel__body" style="padding:0;">
+      <table class="table"><thead><tr><th>Login</th><th>Naam</th><th>Wachtwoord</th><th>Rol</th><th style="width:4%;"></th></tr></thead>
+      <tbody>
+        ${accounts.map((a,i)=>`<tr>
+          <td><input class="input" data-user="${i}" data-f="login" value="${esc(a.login)}" style="min-width:100px;"/></td>
+          <td><input class="input" data-user="${i}" data-f="naam" value="${esc(a.naam)}" style="min-width:100px;"/></td>
+          <td><input class="input" data-user="${i}" data-f="password" value="${esc(a.password)}" style="min-width:100px;"/></td>
+          <td><select class="input" data-user="${i}" data-f="role" style="min-width:100px;">
+            <option value="admin" ${a.role==="admin"?"selected":""}>Admin</option>
+            <option value="viewer" ${a.role==="viewer"?"selected":""}>Viewer</option>
+          </select></td>
+          <td><button class="btn--icon-del" data-del-user="${i}" title="Verwijder">x</button></td>
+        </tr>`).join("")}
+      </tbody></table>
+    </div></div>
+
+    <!-- Traject-types -->
+    <div class="panel" style="margin-top:16px;"><div class="panel__header"><div class="panel__title">Traject-types</div>
+      <button class="btn" id="btnAddType">+ Type</button></div>
+    <div class="panel__body">
+      <div class="tag-list" id="typeList">
+        ${types.map((t,i)=>`<div class="tag-item">
+          <input class="input tag-input" data-type-idx="${i}" value="${esc(t)}"/>
+          <button class="btn--icon-del" data-del-type="${i}">x</button>
+        </div>`).join("")}
+        ${!types.length?`<div class="muted" style="font-size:13px;">Geen types. Klik + Type om toe te voegen.</div>`:""}
+      </div>
+    </div></div>
+
+    <!-- Thema's -->
+    <div class="panel" style="margin-top:16px;"><div class="panel__header"><div class="panel__title">Thema's (CO)</div>
+      <button class="btn" id="btnAddThema">+ Thema</button></div>
+    <div class="panel__body">
+      <div class="tag-list" id="themaList">
+        ${themas.map((t,i)=>`<div class="tag-item">
+          <input class="input tag-input" data-thema-idx="${i}" value="${esc(t)}"/>
+          <button class="btn--icon-del" data-del-thema="${i}">x</button>
+        </div>`).join("")}
+        ${!themas.length?`<div class="muted" style="font-size:13px;">Geen thema's. Klik + Thema om toe te voegen.</div>`:""}
+      </div>
+    </div></div>
+
+    <!-- Save settings -->
+    <div class="toolbar" style="margin-top:16px;justify-content:flex-end;">
+      <button class="btn btn--save" id="btnSaveSettings">Instellingen opslaan naar GitHub</button>
+    </div>
+  `;
 }
 
 export function bind(state,root){
+  // GitHub config
   root.querySelector("#btnSaveCfg")?.addEventListener("click",()=>{
     setConfig({repo:root.querySelector("#cfgRepo")?.value||"",branch:root.querySelector("#cfgBranch")?.value||"main",token:root.querySelector("#cfgToken")?.value||""});
-    updateBadge(state); toast("Instellingen opgeslagen.");
+    state.isAdmin=isAdmin(); toast("GitHub-koppeling opgeslagen.");
   });
   root.querySelector("#btnTestCfg")?.addEventListener("click",async()=>{
     setConfig({repo:root.querySelector("#cfgRepo")?.value||"",branch:root.querySelector("#cfgBranch")?.value||"main",token:root.querySelector("#cfgToken")?.value||""});
-    updateBadge(state);
-    const el=root.querySelector("#testResult"); el.innerHTML=`<div class="muted" style="font-size:13px;">Testen...</div>`;
+    state.isAdmin=isAdmin();
+    const el=root.querySelector("#testResult"); el.innerHTML=`<div class="muted">Testen...</div>`;
     const r=await validateToken();
     if(r.ok)el.innerHTML=`<div style="color:var(--green);font-size:13px;">Verbonden met <strong>${esc(r.repoName)}</strong>. Push: ${r.permissions?.push?"Ja":"Nee"}.</div>`;
     else el.innerHTML=`<div style="color:var(--red);font-size:13px;">Fout: ${esc(r.error)}</div>`;
   });
-  root.querySelector("#btnClearCfg")?.addEventListener("click",()=>{clearConfig();updateBadge(state);toast("Koppeling verwijderd.");state.rerender();});
+  root.querySelector("#btnClearCfg")?.addEventListener("click",()=>{clearConfig();state.isAdmin=false;toast("Koppeling verwijderd.");state.rerender();});
+
+  // Add user
+  root.querySelector("#btnAddUser")?.addEventListener("click",()=>{
+    state.settings.accounts=state.settings.accounts||[];
+    state.settings.accounts.push({login:"",naam:"",password:"",role:"viewer"});
+    state.rerender();
+  });
+  // Delete user
+  root.querySelectorAll("[data-del-user]")?.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const idx=Number(btn.getAttribute("data-del-user"));
+      state.settings.accounts.splice(idx,1);
+      state.rerender();
+    });
+  });
+
+  // Add type
+  root.querySelector("#btnAddType")?.addEventListener("click",()=>{
+    state.settings.trajectTypes=state.settings.trajectTypes||[];
+    state.settings.trajectTypes.push("Nieuw type");
+    state.rerender();
+  });
+  // Delete type
+  root.querySelectorAll("[data-del-type]")?.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const idx=Number(btn.getAttribute("data-del-type"));
+      state.settings.trajectTypes.splice(idx,1);
+      state.rerender();
+    });
+  });
+
+  // Add thema
+  root.querySelector("#btnAddThema")?.addEventListener("click",()=>{
+    state.settings.themas=state.settings.themas||[];
+    state.settings.themas.push("Nieuw thema");
+    state.rerender();
+  });
+  // Delete thema
+  root.querySelectorAll("[data-del-thema]")?.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const idx=Number(btn.getAttribute("data-del-thema"));
+      state.settings.themas.splice(idx,1);
+      state.rerender();
+    });
+  });
+
+  // SAVE ALL SETTINGS
+  root.querySelector("#btnSaveSettings")?.addEventListener("click",async()=>{
+    // Read current values from inputs
+    const accounts=[];
+    const userRows=root.querySelectorAll("[data-user]");
+    const userMap={};
+    userRows.forEach(input=>{
+      const i=Number(input.getAttribute("data-user"));
+      const f=input.getAttribute("data-f");
+      if(!userMap[i])userMap[i]={};
+      userMap[i][f]=input.value?.trim()||"";
+    });
+    Object.values(userMap).forEach(u=>{
+      if(u.login)accounts.push({login:u.login,naam:u.naam||u.login,password:u.password||"",role:u.role||"viewer"});
+    });
+
+    const types=[];
+    root.querySelectorAll("[data-type-idx]")?.forEach(input=>{
+      const v=input.value?.trim(); if(v)types.push(v);
+    });
+
+    const themas=[];
+    root.querySelectorAll("[data-thema-idx]")?.forEach(input=>{
+      const v=input.value?.trim(); if(v)themas.push(v);
+    });
+
+    state.settings={accounts,trajectTypes:types,themas};
+
+    const btn=root.querySelector("#btnSaveSettings");
+    btn.disabled=true; btn.textContent="Bezig...";
+    try{
+      await saveData("settings.json",state.settings,"Update settings");
+      toast("Instellingen opgeslagen! Herlaad de pagina om wijzigingen te activeren.");
+    }catch(e){toast("Fout: "+e.message);}
+    btn.disabled=false; btn.textContent="Instellingen opslaan naar GitHub";
+  });
 }

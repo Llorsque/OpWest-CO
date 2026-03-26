@@ -1,6 +1,6 @@
 import { qs, qsa, toast, APP_VERSION } from "./shared/utils.js";
 import { isAdmin, loadData } from "./shared/github.js";
-import { isLoggedIn, isAdminUser, getUserName, logout, renderLoginScreen, bindLoginScreen } from "./shared/login.js";
+import { isLoggedIn, isAdminUser, getUserName, logout, loadAccounts, renderLoginScreen, bindLoginScreen } from "./shared/login.js";
 import * as Landing      from "./modules/landing.js";
 import * as Verenigingen from "./modules/verenigingen/index.js";
 import * as Trajecten    from "./modules/trajecten/index.js";
@@ -18,14 +18,22 @@ const ROUTES = {
 };
 
 const state = {
-  isAdmin: false, userName: "",
-  ui: { q:"", selectedId:null, showAdd:false, showAddProject:false, showAddUpcoming:false, showAddAct:false, showAddTraject:false, selectedTrajectId:null },
-  verenigingen:[], trajecten:[], projecten:[], aankomend:[], gemeente:{}, activiteiten:[], resources:{}, acties:[],
-  rerender: () => {}
+  isAdmin:false, userName:"",
+  ui:{q:"",selectedId:null,showAdd:false,showAddProject:false,showAddUpcoming:false,showAddAct:false,showAddTraject:false,selectedTrajectId:null},
+  verenigingen:[],trajecten:[],projecten:[],aankomend:[],gemeente:{},activiteiten:[],resources:{},acties:[],
+  settings:{accounts:[],trajectTypes:[],themas:[]},
+  rerender:()=>{}
 };
 
 async function boot(){
-  if(!isLoggedIn()){ document.body.innerHTML = renderLoginScreen(); bindLoginScreen(() => location.reload()); return; }
+  // Always load accounts first (needed for login)
+  await loadAccounts();
+
+  if(!isLoggedIn()){
+    document.body.innerHTML = renderLoginScreen();
+    bindLoginScreen(()=>location.reload());
+    return;
+  }
   startApp();
 }
 
@@ -35,30 +43,31 @@ async function startApp(){
   state.isAdmin = isAdminUser() && isAdmin();
   state.userName = getUserName();
   updateAdminBadge(); updateUserBadge();
-  const sl = qs("a[href='#/instellingen']"); if(sl && !isAdminUser()) sl.style.display = "none";
+  const sl=qs("a[href='#/instellingen']"); if(sl&&!isAdminUser()) sl.style.display="none";
   await loadAllData();
-  qs("#btnToggleSidebar")?.addEventListener("click", () => qs(".sidebar")?.classList.toggle("collapsed"));
-  qs("#btnLogout")?.addEventListener("click", () => { logout(); location.reload(); });
-  window.addEventListener("hashchange", renderRoute);
-  state.rerender = renderRoute;
+  qs("#btnToggleSidebar")?.addEventListener("click",()=>qs(".sidebar")?.classList.toggle("collapsed"));
+  qs("#btnLogout")?.addEventListener("click",()=>{logout();location.reload();});
+  window.addEventListener("hashchange",renderRoute);
+  state.rerender=renderRoute;
   renderRoute();
 }
 
 async function loadAllData(){
-  const [ver,trj,prj,aank,gem,act,res,acties] = await Promise.all([
-    loadData("verenigingen.json",[]), loadData("trajecten.json",[]), loadData("projecten.json",[]),
-    loadData("aankomend.json",[]), loadData("gemeente.json",{kaders:"",contacten:"",links:""}),
-    loadData("activiteiten.json",[]), loadData("resources.json",{documenten:"",partners:"",tools:""}),
-    loadData("acties.json",[])
+  const [ver,trj,prj,aank,gem,act,res,acties,settings] = await Promise.all([
+    loadData("verenigingen.json",[]),loadData("trajecten.json",[]),loadData("projecten.json",[]),
+    loadData("aankomend.json",[]),loadData("gemeente.json",{kaders:"",contacten:"",links:""}),
+    loadData("activiteiten.json",[]),loadData("resources.json",{documenten:"",partners:"",tools:""}),
+    loadData("acties.json",[]),loadData("settings.json",{accounts:[],trajectTypes:[],themas:[]})
   ]);
-  state.verenigingen=ver||[]; state.trajecten=trj||[]; state.projecten=prj||[];
-  state.aankomend=aank||[]; state.gemeente=gem||{}; state.activiteiten=act||[];
-  state.resources=res||{}; state.acties=acties||[];
+  state.verenigingen=ver||[];state.trajecten=trj||[];state.projecten=prj||[];
+  state.aankomend=aank||[];state.gemeente=gem||{};state.activiteiten=act||[];
+  state.resources=res||{};state.acties=acties||[];
+  state.settings=settings||{accounts:[],trajectTypes:[],themas:[]};
 }
 
 function updateAdminBadge(){
   const el=qs("#adminBadge"); if(!el)return;
-  if(state.isAdmin) el.innerHTML=`<div class="chip chip--admin"><span class="chip__dot chip__dot--green"></span><span class="chip__text">Admin (bewerkbaar)</span></div>`;
+  if(state.isAdmin) el.innerHTML=`<div class="chip chip--admin"><span class="chip__dot chip__dot--green"></span><span class="chip__text">Admin</span></div>`;
   else if(isAdminUser()) el.innerHTML=`<div class="chip chip--admin"><span class="chip__dot chip__dot--yellow"></span><span class="chip__text">Admin (geen token)</span></div>`;
   else el.innerHTML=`<div class="chip"><span class="chip__dot"></span><span class="chip__text">Alleen-lezen</span></div>`;
 }
@@ -69,9 +78,7 @@ function updateUserBadge(){
 }
 
 function getRoute(){
-  const raw=(location.hash||"#/").replace(/^#/,"");
-  const path=raw.startsWith("/")?raw:"/"+raw;
-  const clean=path.split("?")[0];
+  const raw=(location.hash||"#/").replace(/^#/,"");const path=raw.startsWith("/")?raw:"/"+raw;const clean=path.split("?")[0];
   return ROUTES[clean]?clean:"/";
 }
 
@@ -92,7 +99,7 @@ async function renderRoute(){
   if(route!=="/trajecten"){state.ui.showAddTraject=false;state.ui.selectedTrajectId=null;}
   try{mod?.hydrate?.(state);}catch(e){}
   const meta=mod?.meta?.()||{title:"Module",meta:""};
-  qs("#crumbTitle").textContent=meta.title; qs("#crumbMeta").textContent=meta.meta||"";
+  qs("#crumbTitle").textContent=meta.title;qs("#crumbMeta").textContent=meta.meta||"";
   qs("#view").innerHTML=mod?.render?.(state)||`<div class="muted">Geen view.</div>`;
   try{mod?.bind?.(state,qs("#view"));}catch(e){console.error(e);toast("Er ging iets mis.");}
 }

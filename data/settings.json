@@ -1,0 +1,27 @@
+{
+  "accounts": [
+    { "login": "Admin", "password": "Welkom01!", "role": "admin", "naam": "Admin" },
+    { "login": "Justin", "password": "Welkom01!", "role": "viewer", "naam": "Justin" },
+    { "login": "Amee", "password": "OpWest01!", "role": "viewer", "naam": "Amee" }
+  ],
+  "trajectTypes": [
+    "Bestuurlijk",
+    "Financieel",
+    "Ledenwerving",
+    "Accommodatie",
+    "Vrijwilligers",
+    "Fusie/samenwerking",
+    "Vitaliteitscan",
+    "Anders"
+  ],
+  "themas": [
+    "Basis op orde",
+    "Samen verenigen",
+    "Aandacht voor vitaliteit",
+    "De club van iedereen",
+    "Samenwerken met de omgeving",
+    "Opgeleid kader",
+    "Sociaal veilige sportomgeving",
+    "Heldere communicatie"
+  ]
+}
