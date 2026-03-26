@@ -1,1 +1,852 @@
-[]
+[
+  {
+    "id": "club-badminton-vereniging-oerterp-935b",
+    "naam": "Badminton Vereniging Oerterp",
+    "sport": "Badminton",
+    "plaats": "Ureterp",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-badmintonclub-gorredijk-9227",
+    "naam": "Badmintonclub Gorredijk",
+    "sport": "Badminton",
+    "plaats": "Gorredijk",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-bc-gorredijk-e564",
+    "naam": "BC Gorredijk",
+    "sport": "Bridge",
+    "plaats": "Gorredijk",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-biljartclub-pomerans-op-tiid-krytsje-85b3",
+    "naam": "Biljartclub Pomerans Op Tiid Krytsje",
+    "sport": "Biljart",
+    "plaats": "",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-biljartvereniging-de-boppeslach-0c77",
+    "naam": "Biljartvereniging de Boppeslach",
+    "sport": "Biljart",
+    "plaats": "",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-biljartvereniging-earst-krytsje-59d7",
+    "naam": "Biljartvereniging Earst Krytsje",
+    "sport": "Biljart",
+    "plaats": "",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-biljartvereniging-us-fertier-b907",
+    "naam": "Biljartvereniging Us Fertier",
+    "sport": "Biljart",
+    "plaats": "",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-bridgeclub-beetsterzwaag-44e9",
+    "naam": "Bridgeclub Beetsterzwaag",
+    "sport": "Bridge",
+    "plaats": "Beetsterzwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-bridgeclub-ureterp-4653",
+    "naam": "Bridgeclub Ureterp",
+    "sport": "Bridge",
+    "plaats": "Ureterp",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-dames-zwemvereniging-beetsterzwaag-a787",
+    "naam": "Dames Zwemvereniging Beetsterzwaag",
+    "sport": "Zwemmen",
+    "plaats": "Beetsterzwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-duurswoude-wijnjeterp-sport-ee6d",
+    "naam": "Duurswoude-Wijnjeterp Sport",
+    "sport": "Volleybal",
+    "plaats": "Wijnjewoude",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-golf-country-club-lauswolt-7fa9",
+    "naam": "Golf & Country Club Lauswolt",
+    "sport": "Golf",
+    "plaats": "Beetsterzwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-gymnastiekvereniging-kwiek-0084",
+    "naam": "Gymnastiekvereniging Kwiek",
+    "sport": "Gymnastiek",
+    "plaats": "Bakkeveen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-gymnastiekvereniging-longa-wijnjewoude-4703",
+    "naam": "Gymnastiekvereniging Longa Wijnjewoude",
+    "sport": "Gymnastiek",
+    "plaats": "Wijnjewoude",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-gymnastiekvereniging-tijnje-f18c",
+    "naam": "Gymnastiekvereniging Tijnje",
+    "sport": "Gymnastiek",
+    "plaats": "Tijnje",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-hemriker-volleybal-club-aac4",
+    "naam": "Hemriker Volleybal Club",
+    "sport": "Volleybal",
+    "plaats": "Hemrik",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-hengelsportvereniging-it-stikelbearske-2166",
+    "naam": "Hengelsportvereniging 'It Stikelbearske",
+    "sport": "Hengelsport",
+    "plaats": "Wijnjewoude",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-hengelsportvereniging-voorwaarts-fbb1",
+    "naam": "Hengelsportvereniging Voorwaarts",
+    "sport": "Hengelsport",
+    "plaats": "",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-hippisch-centrum-bakkeveen-154e",
+    "naam": "Hippisch Centrum Bakkeveen",
+    "sport": "Paardrijden",
+    "plaats": "Bakkeveen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-ijsclub-iisnocht-3608",
+    "naam": "IJsclub 'Iisnocht",
+    "sport": "Schaatsen",
+    "plaats": "Beetsterzwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": false,
+    "notitie": ""
+  },
+  {
+    "id": "club-ijsclub-h-ld-moed-00a4",
+    "naam": "IJsclub Hâld Moed",
+    "sport": "Schaatsen",
+    "plaats": "Gorredijk",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": false,
+    "notitie": ""
+  },
+  {
+    "id": "club-ijsclub-de-onderneming-65cb",
+    "naam": "IJsclub De Onderneming",
+    "sport": "Schaatsen",
+    "plaats": "Tijnje",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": false,
+    "notitie": ""
+  },
+  {
+    "id": "club-ijsclub-eendracht-79d3",
+    "naam": "IJsclub Eendracht",
+    "sport": "Schaatsen",
+    "plaats": "Nij Beets",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": false,
+    "notitie": ""
+  },
+  {
+    "id": "club-ijsclub-great-foar-t-865d",
+    "naam": "IJsclub Great Foarút",
+    "sport": "Schaatsen",
+    "plaats": "Wijnjewoude",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": false,
+    "notitie": ""
+  },
+  {
+    "id": "club-ijsclub-haast-u-516e",
+    "naam": "IJsclub Haast U",
+    "sport": "Schaatsen",
+    "plaats": "Hemrik",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": false,
+    "notitie": ""
+  },
+  {
+    "id": "club-ijsclub-klein-begin-e924",
+    "naam": "IJsclub Klein Begin",
+    "sport": "Schaatsen",
+    "plaats": "Tijnje",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": false,
+    "notitie": ""
+  },
+  {
+    "id": "club-ijsclub-langezwaag-bad8",
+    "naam": "IJsclub Langezwaag",
+    "sport": "Schaatsen",
+    "plaats": "Langezwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": false,
+    "notitie": ""
+  },
+  {
+    "id": "club-ijsclub-spaltenbrege-f855",
+    "naam": "IJsclub Spaltenbrege",
+    "sport": "Schaatsen",
+    "plaats": "Terwispel",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": false,
+    "notitie": ""
+  },
+  {
+    "id": "club-ijsclub-ysnocht-ba3f",
+    "naam": "IJsclub Ysnocht",
+    "sport": "Schaatsen",
+    "plaats": "Siegerswoude",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": false,
+    "notitie": ""
+  },
+  {
+    "id": "club-ijsvereniging-oerterp-a62a",
+    "naam": "IJsvereniging 'Oerterp",
+    "sport": "Schaatsen",
+    "plaats": "Ureterp",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": false,
+    "notitie": ""
+  },
+  {
+    "id": "club-jeu-de-boules-vereniging-opsterland-3a22",
+    "naam": "Jeu de Boules Vereniging Opsterland",
+    "sport": "Jeu des Boules",
+    "plaats": "",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-koersbal-d-c-2da8",
+    "naam": "Koersbal D.C.",
+    "sport": "Koersbal",
+    "plaats": "",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-korfbalvereniging-oerterp-f570",
+    "naam": "Korfbalvereniging Oerterp",
+    "sport": "Korfbal",
+    "plaats": "Ureterp",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-korfbalvereniging-w-z-wis-mei-doelen-419d",
+    "naam": "Korfbalvereniging Wêz Wis Mei Doelen",
+    "sport": "Korfbal",
+    "plaats": "Hemrik",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-l-t-c-gorredijk-d91a",
+    "naam": "L.T.C. Gorredijk",
+    "sport": "Tennis",
+    "plaats": "Gorredijk",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-ldodk-leer-door-oefening-de-korfbalsport-0177",
+    "naam": "LDODK (Leer Door Oefening De Korfbalsport)",
+    "sport": "Korfbal",
+    "plaats": "Gorredijk",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-ontspanning-door-voetbal-o-d-v-6900",
+    "naam": "Ontspanning Door Voetbal (O.D.V.)",
+    "sport": "Voetbal",
+    "plaats": "Wijnjewoude",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-ouderengymnastiek-frieschepalen-9bf5",
+    "naam": "Ouderengymnastiek Frieschepalen",
+    "sport": "Gymnastiek",
+    "plaats": "Frieschepalen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-outdoor-bakkeveen-7eb9",
+    "naam": "Outdoor Bakkeveen",
+    "sport": "Outdoorsport",
+    "plaats": "Bakkeveen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-vv-reva-37b0",
+    "naam": "vv Reva",
+    "sport": "Volleybal",
+    "plaats": "Gorredijk",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-rijvereniging-de-d-nruters-9fc6",
+    "naam": "Rijvereniging De Dúnruters",
+    "sport": "Paardrijden",
+    "plaats": "Bakkeveen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-r-ljende-koerts-195d",
+    "naam": "Rôljende Koerts",
+    "sport": "",
+    "plaats": "",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-rolstoelrugbyclub-de-quad-fighters-4620",
+    "naam": "Rolstoelrugbyclub De Quad Fighters",
+    "sport": "Aangepast Sporten",
+    "plaats": "Beetsterzwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-rugbyclub-de-wrotters-2fcc",
+    "naam": "Rugbyclub De Wrotters",
+    "sport": "Rugby",
+    "plaats": "Gorredijk",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-s-v-hemrik-194f",
+    "naam": "S.V. Hemrik",
+    "sport": "Volleybal",
+    "plaats": "Hemrik",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-schaakvereniging-gorredijk-9a50",
+    "naam": "Schaakvereniging Gorredijk",
+    "sport": "Schaken",
+    "plaats": "Gorredijk",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-wispolia-a2e9",
+    "naam": "Sportvereniging Wispolia",
+    "sport": "Omnivereniging",
+    "plaats": "Terwispel",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-langezwaag-bb7c",
+    "naam": "Sportvereniging Langezwaag",
+    "sport": "Omnivereniging",
+    "plaats": "Langezwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-rood-wit-frieschepalen-f300",
+    "naam": "Sportvereniging Rood Wit Frieschepalen",
+    "sport": "Voetbal",
+    "plaats": "Frieschepalen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-tot-heil-onzer-ribbenkast-thor-78fe",
+    "naam": "sportvereniging Tot Heil Onzer Ribbenkast (THOR)",
+    "sport": "Omnivereniging",
+    "plaats": "Lippenhuizen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-stichting-survival-bakkeveen-07bd",
+    "naam": "Stichting Survival Bakkeveen",
+    "sport": "Outdoorsport",
+    "plaats": "Bakkeveen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-tennisclub-lauswolt-8ca0",
+    "naam": "Tennisclub Lauswolt",
+    "sport": "Tennis",
+    "plaats": "Beetsterzwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-tennisclub-tijnje-da03",
+    "naam": "Tennisclub Tijnje",
+    "sport": "Tennis",
+    "plaats": "Tijnje",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-tennisvereniging-dundelle-0592",
+    "naam": "Tennisvereniging Dundelle",
+    "sport": "Tennis",
+    "plaats": "Bakkeveen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-tennisvereniging-oerterp-bd26",
+    "naam": "Tennisvereniging Oerterp",
+    "sport": "Tennis",
+    "plaats": "Ureterp",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-tennisvereniging-weningewalde-ea25",
+    "naam": "Tennisvereniging Weningewalde",
+    "sport": "Tennis",
+    "plaats": "Wijnjewoude",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-tennisvereniging-nijbeets-e9f4",
+    "naam": "Tennisvereniging-Nijbeets",
+    "sport": "Tennis",
+    "plaats": "Nij Beets",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-touwtrekvereniging-bakkeveen-40b7",
+    "naam": "Touwtrekvereniging Bakkeveen",
+    "sport": "Touwtrekken",
+    "plaats": "Bakkeveen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-v-v-oerterp-4700",
+    "naam": "V.V. Oerterp",
+    "sport": "Voetbal",
+    "plaats": "Ureterp",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-vereniging-damclub-oerterp-1bb1",
+    "naam": "Vereniging Damclub Oerterp",
+    "sport": "Dammen",
+    "plaats": "Ureterp",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-vereniging-ysclub-fryskepeallen-a4d3",
+    "naam": "Vereniging Ysclub Fryskepeallen",
+    "sport": "Schaatsen",
+    "plaats": "Frieschepalen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-voetbalvereniging-bakkeveen-ff92",
+    "naam": "Voetbalvereniging Bakkeveen",
+    "sport": "Voetbal",
+    "plaats": "Bakkeveen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-voetbalvereniging-blue-boys-a948",
+    "naam": "Voetbalvereniging Blue Boys",
+    "sport": "Voetbal",
+    "plaats": "Nij Beets",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-voetbalvereniging-de-sweach-2311",
+    "naam": "Voetbalvereniging De Sweach",
+    "sport": "Voetbal",
+    "plaats": "Beetsterzwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-voetbalvereniging-gorredijk-f6b4",
+    "naam": "Voetbalvereniging Gorredijk",
+    "sport": "Voetbal",
+    "plaats": "Gorredijk",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-voetbalvereniging-tijnje-797e",
+    "naam": "Voetbalvereniging Tijnje",
+    "sport": "Voetbal",
+    "plaats": "Tijnje",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-volleybalvereniging-bakkeveen-7dda",
+    "naam": "Volleybalvereniging Bakkeveen",
+    "sport": "Volleybal",
+    "plaats": "Bakkeveen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-volleybalvereniging-ods-13be",
+    "naam": "Volleybalvereniging ODS",
+    "sport": "Volleybal",
+    "plaats": "Beetsterzwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-volleybalvereniging-oerterp-2eda",
+    "naam": "Volleybalvereniging Oerterp",
+    "sport": "Volleybal",
+    "plaats": "Ureterp",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-volleybalvereniging-the-oldtimers-1b42",
+    "naam": "Volleybalvereniging The Oldtimers",
+    "sport": "Volleybal",
+    "plaats": "",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-volleybalvereniging-tijnje-e4ac",
+    "naam": "Volleybalvereniging Tijnje",
+    "sport": "Volleybal",
+    "plaats": "Tijnje",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-zwem-en-poloclub-isis-2236",
+    "naam": "Zwem- en Poloclub Isis",
+    "sport": "Zwemmen",
+    "plaats": "Gorredijk",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-wispolia-voetbal-ae58",
+    "naam": "Sportvereniging Wispolia Voetbal",
+    "sport": "Voetbal",
+    "plaats": "Terwispel",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-wispolia-gymnsatiek-08b2",
+    "naam": "Sportvereniging Wispolia Gymnsatiek",
+    "sport": "Gymnastiek",
+    "plaats": "Terwispel",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-wispolia-tennis-961b",
+    "naam": "Sportvereniging Wispolia Tennis",
+    "sport": "Tennis",
+    "plaats": "Terwispel",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-wispolia-volleybal-e524",
+    "naam": "Sportvereniging Wispolia Volleybal",
+    "sport": "Volleybal",
+    "plaats": "Terwispel",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-wispolia-badminton-7dea",
+    "naam": "Sportvereniging Wispolia Badminton",
+    "sport": "Badminton",
+    "plaats": "Terwispel",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-wispolia-yoga-62d4",
+    "naam": "Sportvereniging Wispolia Yoga",
+    "sport": "Yoga",
+    "plaats": "Terwispel",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-langezwaag-voetbal-8e92",
+    "naam": "Sportvereniging Langezwaag Voetbal",
+    "sport": "Voetbal",
+    "plaats": "Langezwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-langezwaag-tennis-824b",
+    "naam": "Sportvereniging Langezwaag Tennis",
+    "sport": "Tennis",
+    "plaats": "Langezwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-langezwaag-volleybal-bbd8",
+    "naam": "Sportvereniging Langezwaag Volleybal",
+    "sport": "Volleybal",
+    "plaats": "Langezwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-langezwaag-gymnastiek-88bd",
+    "naam": "Sportvereniging Langezwaag Gymnastiek",
+    "sport": "Gymnastiek",
+    "plaats": "Langezwaag",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-tot-heil-onzer-ribbenkast-thor-voetbal-52e7",
+    "naam": "Sportvereniging Tot Heil Onzer Ribbenkast (THOR) Voetbal",
+    "sport": "Voetbal",
+    "plaats": "Lippenhuizen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-tot-heil-onzer-ribbenkast-thor-volleybal-95db",
+    "naam": "Sportvereniging Tot Heil Onzer Ribbenkast (THOR) Volleybal",
+    "sport": "Volleybal",
+    "plaats": "Lippenhuizen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  },
+  {
+    "id": "club-sportvereniging-tot-heil-onzer-ribbenkast-thor-gymnastiek-6604",
+    "naam": "Sportvereniging Tot Heil Onzer Ribbenkast (THOR) Gymnastiek",
+    "sport": "Gymnastiek",
+    "plaats": "Lippenhuizen",
+    "gemeente": "Opsterland",
+    "contacten": [],
+    "actief": true,
+    "notitie": ""
+  }
+]
