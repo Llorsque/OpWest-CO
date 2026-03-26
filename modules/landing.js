@@ -3,11 +3,13 @@ import { esc } from "../shared/utils.js";
 export function meta(){ return { title:"Dashboard", meta:"Overzicht van alle modules" }; }
 
 export function render(state){
-  const c = { ver:state.verenigingen.length, trj:state.trajecten.length, prj:state.projecten.length, aan:state.aankomend.length, act:state.activiteiten.length,
-    actOpen:(state.acties||[]).filter(a=>a.type==="actie"&&a.status!=="Afgerond").length };
+  const total=state.verenigingen.length;
+  const actief=state.verenigingen.filter(v=>v.actief!==false).length;
+  const c={ver:total,actief,trj:state.trajecten.length,prj:state.projecten.length,aan:state.aankomend.length,act:state.activiteiten.length,
+    actOpen:(state.acties||[]).filter(a=>a.type==="actie"&&a.status!=="Afgerond").length};
   return `
     <div class="grid grid--cards">
-      ${card("Verenigingen",`${c.ver} clubs — contacten, acties en dossiers.`,["Database",`${c.ver}`],"#/verenigingen")}
+      ${card("Verenigingen",`${c.actief} actief van ${c.ver} clubs — contacten, acties en dossiers.`,["Actief",`${c.actief}/${c.ver}`],"#/verenigingen")}
       ${card("Trajecten",`${c.trj} trajecten — langdurige ondersteuning.`,["Ondersteuning",`${c.trj}`],"#/trajecten")}
       ${card("Lopende projecten",`${c.prj} projecten — status en deadlines.`,["Roadmap",`${c.prj}`],"#/projecten")}
       ${card("Aankomende zaken",`${c.aan} items — afspraken en events.`,["Planning",`${c.aan}`],"#/aankomend")}
@@ -17,8 +19,8 @@ export function render(state){
       <div class="card card--wide"><div class="card__inner">
         <div class="card__title"><span>Aan de slag</span><span class="pill">${state.isAdmin?"Admin":"Viewer"}</span></div>
         <div class="card__subtitle">${state.isAdmin
-          ?`Je bent ingelogd als admin. Bewerk data en klik <strong>Opslaan naar GitHub</strong>.${c.actOpen?` Er staan <strong>${c.actOpen} open acties</strong>.`:""}`
-          :`Je bekijkt de tool als alleen-lezen. Wil je bewerken? Ga naar <a href="#/instellingen" style="color:var(--accent);">Instellingen</a>.`}</div>
+          ?`Je bent ingelogd als admin.${c.actOpen?` Er staan <strong>${c.actOpen} open acties</strong>.`:""}`
+          :`Je bekijkt de tool als alleen-lezen.`}</div>
       </div></div>
     </div>`;
 }
