@@ -5,7 +5,10 @@ export function meta(){ return { title:"Dashboard", meta:"Overzicht van alle mod
 export function render(state){
   const total=state.verenigingen.length;
   const actief=state.verenigingen.filter(v=>v.actief!==false).length;
-  const c={ver:total,actief,trj:state.trajecten.length,prj:state.projecten.length,aan:state.aankomend.length,act:state.activiteiten.length,
+  const actPlan=state.activiteiten||[];
+  const actAvg=actPlan.length?Math.round(actPlan.reduce((s,a)=>s+(a.voortgang||0),0)/actPlan.length):0;
+  const actDone=actPlan.filter(a=>(a.voortgang||0)>=100).length;
+  const c={ver:total,actief,trj:state.trajecten.length,prj:state.projecten.length,aan:state.aankomend.length,
     actOpen:(state.acties||[]).filter(a=>a.type==="actie"&&a.status!=="Afgerond").length};
   return `
     <div class="grid grid--cards">
@@ -14,7 +17,7 @@ export function render(state){
       ${card("Lopende projecten",`${c.prj} projecten — status en deadlines.`,["Roadmap",`${c.prj}`],"#/projecten")}
       ${card("Aankomende zaken",`${c.aan} items — afspraken en events.`,["Planning",`${c.aan}`],"#/aankomend")}
       ${card("Gemeente overzicht","Cockpit: statistieken, kaders, contacten.",["Cockpit","Live"],"#/gemeente")}
-      ${card("Activiteitenplan",`${c.act} activiteiten — thema en impact.`,["Plan",`${c.act}`],"#/activiteiten")}
+      ${card("Activiteitenplan",`${actAvg}% gerealiseerd — ${actDone} van ${actPlan.length} doelen afgerond.`,["Voortgang",`${actAvg}%`],"#/activiteiten")}
       ${card("Documenten & contacten","Overige documenten, partners en tools.",["Bibliotheek","Netwerk"],"#/resources")}
       <div class="card card--wide"><div class="card__inner">
         <div class="card__title"><span>Aan de slag</span><span class="pill">${state.isAdmin?"Admin":"Viewer"}</span></div>

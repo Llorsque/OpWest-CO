@@ -163,6 +163,18 @@ select.input{cursor:pointer;} select.input option{background:var(--bg2);color:va
 .tag-input{flex:1;}
 .pill--thema{border-color:rgba(45,122,111,0.2);background:var(--accent-light);color:var(--accent);font-weight:500;}
 
+/* Progress bar */
+.progress-track{height:12px;background:var(--bg);border-radius:6px;overflow:hidden;border:1px solid var(--border);flex:1;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-light),var(--accent));border-radius:6px;transition:width 300ms ease;min-width:2px;}
+
+/* Filter selects */
+.filter-select{flex:0 0 140px;min-width:120px;font-size:12px;padding:8px 10px;}
+
+/* Range input styling */
+input[type="range"]{-webkit-appearance:none;appearance:none;height:6px;background:var(--bg);border:1px solid var(--border);border-radius:3px;outline:none;}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg2);box-shadow:var(--shadow-sm);}
+input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg2);box-shadow:var(--shadow-sm);}
+
 /* Inline delete button */
 .btn--icon-del{
   width:26px;height:26px;border-radius:8px;border:1px solid transparent;
