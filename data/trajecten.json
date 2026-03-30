@@ -7,8 +7,8 @@
     "thema": "Opgeleid kader",
     "programma": "Overig",
     "omschrijving": "Coach on the Job (trainer) traject via servicelijst.",
-    "startDatum": "",
-    "verwachtEinde": "",
+    "startDatum": "2026-04-01",
+    "verwachtEinde": "2026-07-01",
     "status": "Intake",
     "coach": "Ine Klosters",
     "financien": {
@@ -26,7 +26,12 @@
         }
       ]
     },
-    "log": []
+    "log": [
+      {
+        "datum": "2026-02-02",
+        "tekst": "Mail contact afstemming"
+      }
+    ]
   },
   {
     "id": "trj-0b4fcc0b-19d3e7c39e5",
