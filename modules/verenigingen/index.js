@@ -78,7 +78,7 @@ export function render(state){
       </div>
     </div>
 
-    ${state.ui.selectedId?`<div class="panel" style="margin-top:16px;">${dossier(state)}</div>`:""}
+    ${state.ui.selectedId?`<div class="panel" id="clubDossier" style="margin-top:16px;">${dossier(state)}</div>`:""}
   `;
 }
 
@@ -122,7 +122,14 @@ export function bind(state,root){
     });
   });
 
-  root.querySelectorAll("[data-select-id]")?.forEach(tr=>{tr.addEventListener("click",()=>{state.ui.selectedId=tr.getAttribute("data-select-id");state.ui.showAdd=false;state.rerender();});});
+  root.querySelectorAll("[data-select-id]")?.forEach(tr=>{tr.addEventListener("click",()=>{
+    state.ui.selectedId=tr.getAttribute("data-select-id");state.ui.showAdd=false;state.rerender();
+    // Scroll dossier into view
+    requestAnimationFrame(()=>{
+      const panel=document.querySelector("#clubDossier");
+      if(panel) panel.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+  });});
 
   root.querySelector("#btnDownloadCSV")?.addEventListener("click",()=>downloadTemplate());
   root.querySelector("#fileCSV")?.addEventListener("change",async(e)=>{

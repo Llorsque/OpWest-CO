@@ -21,7 +21,7 @@ export function render(state){
         ${!list.length?`<div class="muted" style="font-size:13px;text-align:center;padding:20px;">Nog geen trajecten.${admin?" Klik + Nieuw traject.":""}</div>`
           :`${trjGroup("Actief",lopend,state,admin)}${trjGroup("Afronding / Gepauzeerd",afronding,state,admin)}${trjGroup("Afgerond",afgerond,state,admin)}`}
       </div></div>
-    ${state.ui.selectedTrajectId&&!state.ui.showAddTraject?`<div class="panel" style="margin-top:16px;">${trjDetail(state)}</div>`:""}
+    ${state.ui.selectedTrajectId&&!state.ui.showAddTraject?`<div class="panel" id="trjDossier" style="margin-top:16px;">${trjDetail(state)}</div>`:""}
   `;
 }
 
@@ -52,7 +52,13 @@ export function bind(state,root){
     toast("Traject aangemaakt."); state.rerender();
   });
 
-  root.querySelectorAll("[data-select-trj]")?.forEach(el=>{el.addEventListener("click",()=>{state.ui.selectedTrajectId=el.getAttribute("data-select-trj");state.ui.showAddTraject=false;state.rerender();});});
+  root.querySelectorAll("[data-select-trj]")?.forEach(el=>{el.addEventListener("click",()=>{
+    state.ui.selectedTrajectId=el.getAttribute("data-select-trj");state.ui.showAddTraject=false;state.rerender();
+    requestAnimationFrame(()=>{
+      const panel=document.querySelector("#trjDossier");
+      if(panel) panel.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+  });});
   root.querySelectorAll("[data-del-trj]")?.forEach(btn=>{
     btn.addEventListener("click",(e)=>{e.stopPropagation();const id=btn.getAttribute("data-del-trj");const t=state.trajecten.find(x=>x.id===id);
       if(!t||!confirm(`Traject '${t.verenigingNaam}' verwijderen?`))return;
