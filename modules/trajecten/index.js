@@ -87,9 +87,11 @@ export function bind(state,root){
   root.querySelector("#detailType")?.addEventListener("change",e=>{const t=getTrj(state);if(t)t.type=e.target.value;});
   root.querySelector("#detailThema")?.addEventListener("change",e=>{const t=getTrj(state);if(t)t.thema=e.target.value;});
   root.querySelector("#detailProgramma")?.addEventListener("change",e=>{const t=getTrj(state);if(t)t.programma=e.target.value;});
+  root.querySelector("#detailStart")?.addEventListener("change",e=>{const t=getTrj(state);if(t)t.startDatum=e.target.value;});
   root.querySelector("#detailEinde")?.addEventListener("change",e=>{const t=getTrj(state);if(t)t.verwachtEinde=e.target.value;});
   root.querySelector("#detailOmschrijving")?.addEventListener("input",e=>{const t=getTrj(state);if(t)t.omschrijving=e.target.value;});
   root.querySelector("#detailCoach")?.addEventListener("input",e=>{const t=getTrj(state);if(t)t.coach=e.target.value?.trim();});
+  root.querySelector("#detailVerNaam")?.addEventListener("input",e=>{const t=getTrj(state);if(t)t.verenigingNaam=e.target.value?.trim();});
   root.querySelectorAll("[data-del-log]")?.forEach(btn=>{btn.addEventListener("click",()=>{const t=getTrj(state);if(t)t.log.splice(Number(btn.getAttribute("data-del-log")),1);state.rerender();});});
 
   // Financiën — totaalbedrag
@@ -204,7 +206,7 @@ function trjDetail(state){
 
   return `
     <div class="panel__header">
-      <div><div class="panel__title">${esc(t.verenigingNaam)}
+      <div><div class="panel__title">${admin?`<input class="input" id="detailVerNaam" value="${esc(t.verenigingNaam)}" style="flex:unset;width:280px;font-weight:600;font-size:14px;padding:6px 10px;"/>`:`${esc(t.verenigingNaam)}`}
         ${t.programma==="Rabo ClubSupport"?`<span class="pill pill--rabo" style="font-size:10px;vertical-align:middle;margin-left:6px;">Rabo ClubSupport</span>`:""}
       </div>
         <div class="muted" style="font-size:12px;">${esc(t.type||"")}${t.thema?" · "+esc(t.thema):""} · ${esc(t.status)}</div></div>
@@ -218,7 +220,7 @@ function trjDetail(state){
             <div class="kv__k">Thema</div><div class="kv__v">${admin?sel("detailThema",themas,t.thema,"Kies thema"):esc(t.thema||"—")}</div>
             <div class="kv__k">Programma</div><div class="kv__v">${admin?sel("detailProgramma",getProgrammaOpties(state),t.programma||"Overig"):esc(t.programma||"Overig")}</div>
             <div class="kv__k">Status</div><div class="kv__v">${admin?sel("detailStatus",STATUS_OPTIONS,t.status):esc(t.status||"—")}</div>
-            <div class="kv__k">Start</div><div class="kv__v">${formatDate(t.startDatum)}</div>
+            <div class="kv__k">Start</div><div class="kv__v">${admin?`<input class="input" id="detailStart" type="date" value="${esc(t.startDatum||"")}" style="flex:unset;width:160px;"/>`:formatDate(t.startDatum)}</div>
             <div class="kv__k">Verwacht einde</div><div class="kv__v">${admin?`<input class="input" id="detailEinde" type="date" value="${esc(t.verwachtEinde||"")}" style="flex:unset;width:160px;"/>`:formatDate(t.verwachtEinde)}</div>
             <div class="kv__k">Coach</div><div class="kv__v">${admin?`<input class="input" id="detailCoach" value="${esc(t.coach||"")}" placeholder="Naam" style="flex:unset;width:200px;"/>`:esc(t.coach||"—")}</div>
           </div>
