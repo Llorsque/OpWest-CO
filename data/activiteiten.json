@@ -1,11 +1,200 @@
 [
   {
-    "id": "act-af7633d2-19d3e64bad0",
-    "titel": "Klas naar de CLub",
-    "thema": "",
-    "impact": "",
+    "id": "act-bo-01",
+    "titel": "Min. 2 inspiratiesessies organiseren (WBTR, verduurzaming, sociale hygiëne)",
+    "thema": "Basis op orde",
+    "impact": "Continuïteit en tijdsbesparing",
+    "partners": "Gemeenten, sportbonden, kennisinstellingen",
+    "voortgang": 0,
+    "toelichting": "Inspiratiesessies op relevante thema's zoals WBTR, verduurzaming en sociale hygiëne."
+  },
+  {
+    "id": "act-bo-02",
+    "titel": "4 clubs begeleiden bij juridische en organisatorische trajecten (o.a. WBTR)",
+    "thema": "Basis op orde",
+    "impact": "Toekomstbestendigheid",
     "partners": "",
-    "voortgang": 100,
+    "voortgang": 0,
+    "toelichting": "Begeleiding bij WBTR-implementatie en bestuursondersteuning."
+  },
+  {
+    "id": "act-bo-03",
+    "titel": "3 clubs stimuleren voor externe ondersteuning (ledenadministratie/penningmeester)",
+    "thema": "Basis op orde",
+    "impact": "Tijdsbesparing vrijwilligers",
+    "partners": "",
+    "voortgang": 0,
+    "toelichting": "Clubs stimuleren om gebruik te maken van externe ledenadministratie of penningmeesterschap."
+  },
+  {
+    "id": "act-bo-04",
+    "titel": "Min. 80% deelnemers geeft aan dat ondersteuning bijdraagt aan tijdsbesparing",
+    "thema": "Basis op orde",
+    "impact": "Kwaliteitsmeting",
+    "partners": "",
+    "voortgang": 0,
+    "toelichting": "Evaluatiedoelstelling: minimaal 80% van de deelnemende clubs ervaart tijdsbesparing en continuïteit."
+  },
+  {
+    "id": "act-ci-01",
+    "titel": "Fryske sporten: min. 1 pilot of evenement uitvoeren",
+    "thema": "De club van iedereen",
+    "impact": "Culturele verbinding",
+    "partners": "",
+    "voortgang": 0,
+    "toelichting": ""
+  },
+  {
+    "id": "act-ci-02",
+    "titel": "OldStars: 2 verenigingen ondersteunen",
+    "thema": "De club van iedereen",
+    "impact": "Tegengaan vergrijzing",
+    "partners": "OldStars",
+    "voortgang": 0,
+    "toelichting": "Ondersteuning bij OldStars-programma om vergrijzing tegen te gaan."
+  },
+  {
+    "id": "act-ci-03",
+    "titel": "TeamFit: 5 verenigingen ondersteunen",
+    "thema": "De club van iedereen",
+    "impact": "Ledenbehoud en vitaliteit",
+    "partners": "TeamFit",
+    "voortgang": 0,
+    "toelichting": ""
+  },
+  {
+    "id": "act-ci-04",
+    "titel": "Passend sportaanbod: 1 nieuwe activiteit voor mensen met een beperking",
+    "thema": "De club van iedereen",
+    "impact": "Inclusiviteit",
+    "partners": "",
+    "voortgang": 0,
+    "toelichting": "Realiseren van passend sportaanbod voor mensen met een beperking."
+  },
+  {
+    "id": "act-ci-05",
+    "titel": "Klas naar de Club / BMO/ASM: samenwerking met min. 5 verenigingen",
+    "thema": "De club van iedereen",
+    "impact": "Jeugdaanwas",
+    "partners": "Scholen, verenigingen",
+    "voortgang": 0,
+    "toelichting": "Samenwerking tussen onderwijs en sportverenigingen via Klas naar de Club en BMO/ASM."
+  },
+  {
+    "id": "act-ci-06",
+    "titel": "Gymles XL: 2x Sportinstuif organiseren voor kinderen/jongeren",
+    "thema": "De club van iedereen",
+    "impact": "Jeugdparticipatie",
+    "partners": "",
+    "voortgang": 0,
+    "toelichting": "Sportinstuiven gericht op kinderen en jongeren."
+  },
+  {
+    "id": "act-ci-07",
+    "titel": "Diversiteit (Sport Inclusie Fonds): 3 clubs ondersteunen met inclusieve projecten",
+    "thema": "De club van iedereen",
+    "impact": "Inclusie en diversiteit",
+    "partners": "Sport Inclusie Fonds",
+    "voortgang": 0,
+    "toelichting": "Aandacht voor diversiteit, o.a. via het Sport Inclusie Fonds."
+  },
+  {
+    "id": "act-ok-01",
+    "titel": "Professionals (SM, VM, VOT) inzetten bij min. 3 verenigingen",
+    "thema": "Opgeleid kader",
+    "impact": "Kwaliteit trainingen",
+    "partners": "Sportbonden",
+    "voortgang": 0,
+    "toelichting": "Inzet van Sportmanagers, Verenigingsmanagers en Vereniging Overstijgende Trainers."
+  },
+  {
+    "id": "act-ok-02",
+    "titel": "1 BMI-opleiding organiseren",
+    "thema": "Opgeleid kader",
+    "impact": "Deskundigheidsbevordering",
+    "partners": "",
+    "voortgang": 0,
+    "toelichting": ""
+  },
+  {
+    "id": "act-ok-03",
+    "titel": "CKC-trajecten aanbieden voor min. 3 clubs",
+    "thema": "Opgeleid kader",
+    "impact": "Clubkadercertificering",
+    "partners": "",
+    "voortgang": 0,
+    "toelichting": ""
+  },
+  {
+    "id": "act-ok-04",
+    "titel": "Min. 10 trainers vakinhoudelijk scholen",
+    "thema": "Opgeleid kader",
+    "impact": "Kwaliteit trainingen",
+    "partners": "Sportbonden",
+    "voortgang": 0,
+    "toelichting": "Vakinhoudelijke scholing in overleg met de bonden."
+  },
+  {
+    "id": "act-ok-05",
+    "titel": "1 workshop/scholing 'Gedrag' organiseren",
+    "thema": "Opgeleid kader",
+    "impact": "Sociaal veilig sportklimaat",
+    "partners": "Special Heroes",
+    "voortgang": 0,
+    "toelichting": "Workshop Gedrag, bijvoorbeeld in samenwerking met Special Heroes."
+  },
+  {
+    "id": "act-sp-01",
+    "titel": "Clubs helpen met verenigingsbrede gedragscode",
+    "thema": "Sociaal veilige sportomgeving",
+    "impact": "Veilig sportklimaat",
+    "partners": "",
+    "voortgang": 0,
+    "toelichting": "Speerpunt Veilig Sportklimaat: actief helpen met het opstellen van een gedragscode."
+  },
+  {
+    "id": "act-sp-02",
+    "titel": "Inzetten op Gezonde Sportomgeving",
+    "thema": "Aandacht voor vitaliteit",
+    "impact": "Gezondheid en preventie",
+    "partners": "",
+    "voortgang": 0,
+    "toelichting": "Speerpunt Vitaliteit."
+  },
+  {
+    "id": "act-sp-03",
+    "titel": "Verkenning Mienskipsinitiatievenloket",
+    "thema": "Samen verenigen",
+    "impact": "Verbinding in de mienskip",
+    "partners": "",
+    "voortgang": 0,
+    "toelichting": "Speerpunt Samen Verenigen: verkenning en verbinding vanuit een Mienskipsinitiatievenloket."
+  },
+  {
+    "id": "act-sp-04",
+    "titel": "Inzet YnBeweging",
+    "thema": "Samenwerken met de omgeving",
+    "impact": "Bewegen stimuleren",
+    "partners": "",
+    "voortgang": 0,
+    "toelichting": "Speerpunt Bewegen & Gezondheid."
+  },
+  {
+    "id": "act-sp-05",
+    "titel": "Lokaal Sportakkoord",
+    "thema": "Samenwerken met de omgeving",
+    "impact": "Beleid en samenwerking",
+    "partners": "Gemeente",
+    "voortgang": 0,
+    "toelichting": "Speerpunt Samenwerking & beleid."
+  },
+  {
+    "id": "act-sp-06",
+    "titel": "Aandacht voor thema 'Open club'",
+    "thema": "Samenwerken met de omgeving",
+    "impact": "Maatschappelijke rol versterken",
+    "partners": "",
+    "voortgang": 0,
     "toelichting": ""
   }
 ]
