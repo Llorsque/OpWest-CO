@@ -1,7 +1,9 @@
 import { esc, uid, toast, formatDate } from "../../shared/utils.js";
 import { saveData } from "../../shared/github.js";
 const STATUS_OPTIONS=["Intake","Lopend","Afronding","Afgerond","Gepauzeerd"];
-const PROGRAMMA_OPTIONS=["Rabo ClubSupport","Overig"];
+const PROGRAMMA_FALLBACK=["Rabo ClubSupport","Overig"];
+
+function getProgrammaOpties(state){ return state.settings?.programmaOpties?.length ? state.settings.programmaOpties : PROGRAMMA_FALLBACK; }
 
 export function meta(){ return { title:"Trajecten", meta:"Langdurige ondersteuning per vereniging" }; }
 
@@ -29,6 +31,12 @@ export function bind(state,root){
   root.querySelector("#btnCreateTraject")?.addEventListener("click",()=>{
     const naam=root.querySelector("#tVereniging")?.value?.trim(); if(!naam){toast("Verenigingsnaam verplicht.");return;}
     const match=state.verenigingen.find(v=>v.naam.toLowerCase()===naam.toLowerCase());
+    const finTotaal=parseFloat(root.querySelector("#tFinTotaal")?.value)||0;
+    const bronnen=[];
+    const bron1=root.querySelector("#tFinBron1")?.value; const bedrag1=parseFloat(root.querySelector("#tFinBedrag1")?.value)||0;
+    if(bron1&&bedrag1) bronnen.push({bron:bron1,bedrag:bedrag1,percentage:finTotaal>0?Math.round((bedrag1/finTotaal)*100):0});
+    const bron2=root.querySelector("#tFinBron2")?.value; const bedrag2=parseFloat(root.querySelector("#tFinBedrag2")?.value)||0;
+    if(bron2&&bedrag2) bronnen.push({bron:bron2,bedrag:bedrag2,percentage:finTotaal>0?Math.round((bedrag2/finTotaal)*100):0});
     state.trajecten.unshift({
       id:uid("trj"),verenigingId:match?.id||"",verenigingNaam:match?.naam||naam,
       type:root.querySelector("#tType")?.value||"",
@@ -37,7 +45,7 @@ export function bind(state,root){
       omschrijving:root.querySelector("#tOmschrijving")?.value?.trim()||"",
       startDatum:root.querySelector("#tStart")?.value||"",verwachtEinde:root.querySelector("#tEinde")?.value||"",
       status:root.querySelector("#tStatus")?.value||"Intake",coach:root.querySelector("#tCoach")?.value?.trim()||"",
-      financien:{totaal:0,bronnen:[]},
+      financien:{totaal:finTotaal,bronnen},
       log:[]
     });
     state.ui.showAddTraject=false; state.ui.selectedTrajectId=state.trajecten[0].id;
@@ -196,7 +204,7 @@ function trjDetail(state){
           <div class="kv" style="margin-bottom:14px;">
             <div class="kv__k">Type</div><div class="kv__v">${admin?sel("detailType",types,t.type,"Kies type"):esc(t.type||"—")}</div>
             <div class="kv__k">Thema</div><div class="kv__v">${admin?sel("detailThema",themas,t.thema,"Kies thema"):esc(t.thema||"—")}</div>
-            <div class="kv__k">Programma</div><div class="kv__v">${admin?sel("detailProgramma",PROGRAMMA_OPTIONS,t.programma||"Overig"):esc(t.programma||"Overig")}</div>
+            <div class="kv__k">Programma</div><div class="kv__v">${admin?sel("detailProgramma",getProgrammaOpties(state),t.programma||"Overig"):esc(t.programma||"Overig")}</div>
             <div class="kv__k">Status</div><div class="kv__v">${admin?sel("detailStatus",STATUS_OPTIONS,t.status):esc(t.status||"—")}</div>
             <div class="kv__k">Start</div><div class="kv__v">${formatDate(t.startDatum)}</div>
             <div class="kv__k">Verwacht einde</div><div class="kv__v">${admin?`<input class="input" id="detailEinde" type="date" value="${esc(t.verwachtEinde||"")}" style="flex:unset;width:160px;"/>`:formatDate(t.verwachtEinde)}</div>
@@ -258,6 +266,8 @@ function addForm(state){
   const clubs=state.verenigingen||[];
   const types=state.settings?.trajectTypes||[];
   const themas=state.settings?.themas||[];
+  const progOpties=getProgrammaOpties(state);
+  const bronOpties=state.settings?.subsidiebronnen||["Rabo ClubSupport","Gemeente","Provincie","Eigen middelen","Anders"];
   return `<div class="panel" style="margin-bottom:16px;border-color:var(--accent);">
     <div class="panel__header"><div class="panel__title">Nieuw traject</div>
       <div class="row" style="gap:6px;"><button class="btn btn--ghost" id="btnCancelTraject">Annuleren</button><button class="btn btn--save" id="btnCreateTraject">Aanmaken</button></div></div>
@@ -266,10 +276,29 @@ function addForm(state){
         <datalist id="clubList">${clubs.map(v=>`<option value="${esc(v.naam)}">`).join("")}</datalist>
         ${selId("tType",types,"","Type ondersteuning")}
         ${selId("tThema",themas,"","Thema")}
-        ${selId("tProgramma",PROGRAMMA_OPTIONS,"Overig","Programma")}
+        ${selId("tProgramma",progOpties,"Overig","Programma")}
         ${selId("tStatus",STATUS_OPTIONS,"Intake","Status")}</div>
       <div class="row" style="margin-top:8px;"><input class="input" id="tStart" type="date" title="Start"/><input class="input" id="tEinde" type="date" title="Einde"/><input class="input" id="tCoach" placeholder="Coach"/></div>
       <textarea class="textarea" id="tOmschrijving" placeholder="Omschrijving" style="margin-top:8px;min-height:60px;"></textarea>
+
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+        <div class="label">Financiën</div>
+        <div class="row" style="margin-bottom:8px;">
+          <div style="font-size:13px;min-width:100px;">Totaalbedrag €</div>
+          <input class="input" id="tFinTotaal" type="number" min="0" step="100" value="0" style="flex:0 0 150px;"/>
+        </div>
+        <div class="row">
+          <div style="font-size:13px;min-width:100px;">Subsidie 1</div>
+          <select class="input" id="tFinBron1" style="flex:0 0 180px;"><option value="">Geen</option>${bronOpties.map(o=>`<option>${esc(o)}</option>`).join("")}</select>
+          <input class="input" id="tFinBedrag1" type="number" min="0" step="50" placeholder="Bedrag €" style="flex:0 0 120px;"/>
+        </div>
+        <div class="row" style="margin-top:6px;">
+          <div style="font-size:13px;min-width:100px;">Subsidie 2</div>
+          <select class="input" id="tFinBron2" style="flex:0 0 180px;"><option value="">Geen</option>${bronOpties.map(o=>`<option>${esc(o)}</option>`).join("")}</select>
+          <input class="input" id="tFinBedrag2" type="number" min="0" step="50" placeholder="Bedrag €" style="flex:0 0 120px;"/>
+        </div>
+        <div class="muted" style="font-size:11px;margin-top:6px;">Meer bronnen kun je toevoegen in het detail-panel na aanmaken.</div>
+      </div>
     </div></div>`;
 }
 

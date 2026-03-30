@@ -10,6 +10,7 @@ export function render(state){
   const types = s.trajectTypes||[];
   const themas = s.themas||[];
   const bronnen = s.subsidiebronnen||[];
+  const progOpties = s.programmaOpties||[];
 
   return `
     <!-- GitHub koppeling -->
@@ -78,6 +79,19 @@ export function render(state){
           <button class="btn--icon-del" data-del-bron-optie="${i}">x</button>
         </div>`).join("")}
         ${!bronnen.length?`<div class="muted" style="font-size:13px;">Geen bronnen. Klik + Bron.</div>`:""}
+      </div>
+    </div></div>
+
+    <!-- Programma-opties -->
+    <div class="panel" style="margin-top:16px;"><div class="panel__header"><div class="panel__title">Programma-opties (trajecten)</div>
+      <button class="btn" id="btnAddProg">+ Optie</button></div>
+    <div class="panel__body">
+      <div class="tag-list" id="progList">
+        ${progOpties.map((t,i)=>`<div class="tag-item">
+          <input class="input tag-input" data-prog-idx="${i}" value="${esc(t)}"/>
+          <button class="btn--icon-del" data-del-prog="${i}">x</button>
+        </div>`).join("")}
+        ${!progOpties.length?`<div class="muted" style="font-size:13px;">Geen opties. Klik + Optie.</div>`:""}
       </div>
     </div></div>
 
@@ -164,6 +178,21 @@ export function bind(state,root){
     });
   });
 
+  // Add programma optie
+  root.querySelector("#btnAddProg")?.addEventListener("click",()=>{
+    state.settings.programmaOpties=state.settings.programmaOpties||[];
+    state.settings.programmaOpties.push("Nieuwe optie");
+    state.rerender();
+  });
+  // Delete programma optie
+  root.querySelectorAll("[data-del-prog]")?.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const idx=Number(btn.getAttribute("data-del-prog"));
+      state.settings.programmaOpties.splice(idx,1);
+      state.rerender();
+    });
+  });
+
   // SAVE ALL SETTINGS
   root.querySelector("#btnSaveSettings")?.addEventListener("click",async()=>{
     // Read current values from inputs
@@ -195,7 +224,12 @@ export function bind(state,root){
       const v=input.value?.trim(); if(v)subsidiebronnen.push(v);
     });
 
-    state.settings={accounts,trajectTypes:types,themas,subsidiebronnen};
+    const programmaOpties=[];
+    root.querySelectorAll("[data-prog-idx]")?.forEach(input=>{
+      const v=input.value?.trim(); if(v)programmaOpties.push(v);
+    });
+
+    state.settings={accounts,trajectTypes:types,themas,subsidiebronnen,programmaOpties};
 
     const btn=root.querySelector("#btnSaveSettings");
     btn.disabled=true; btn.textContent="Bezig...";
