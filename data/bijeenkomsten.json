@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": "bij-18b9a91e-19d3e81c3c2",
+    "titel": "KNVB Regiocafe",
+    "type": "Bijeenkomst",
+    "datum": "2026-03-18",
+    "locatie": "Nieuwehorne",
+    "notitie": "Regiocafe voor verenigingen Zuid-Oost. Ism Ooststellingwerf, Heerenveen en DFM",
+    "deelnemers": []
+  },
+  {
+    "id": "bij-fd4e7ed1-19d3e7fc627",
+    "titel": "KNGU Regiocafe",
+    "type": "Bijeenkomst",
+    "datum": "2026-01-27",
+    "locatie": "Kortezwaag",
+    "notitie": "",
+    "deelnemers": []
+  }
+]
