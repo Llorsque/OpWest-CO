@@ -1,5 +1,34 @@
 [
   {
+    "id": "trj-0b4fcc0b-19d3e7c39e5",
+    "verenigingId": "club-voetbalvereniging-blue-boys-20b7",
+    "verenigingNaam": "Voetbalvereniging Blue Boys",
+    "type": "Vrijwilligers",
+    "thema": "Opgeleid kader",
+    "programma": "Overig",
+    "omschrijving": "CKC traject voor 10 trainers van Blueboys",
+    "startDatum": "2026-01-01",
+    "verwachtEinde": "2026-06-30",
+    "status": "Lopend",
+    "coach": "Jan Dupon",
+    "financien": {
+      "totaal": 3000,
+      "bronnen": [
+        {
+          "bron": "Sportfonds",
+          "bedrag": 3000,
+          "percentage": 100
+        }
+      ]
+    },
+    "log": [
+      {
+        "datum": "2025-11-21",
+        "tekst": "Intake gesprek met bestuur"
+      }
+    ]
+  },
+  {
     "id": "trj-9e1acfd1-19d3e5177a0",
     "verenigingId": "club-korfbalvereniging-oerterp-c8b5",
     "verenigingNaam": "Korfbalvereniging Oerterp",
