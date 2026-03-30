@@ -23,14 +23,14 @@ export function render(state){
       <div class="panel__body">
         <div class="row" style="gap:20px;align-items:center;">
           <div style="text-align:center;min-width:80px;">
-            <div style="font-size:36px;font-weight:700;color:var(--accent);font-family:var(--font-display);">${avgProgress}%</div>
+            <div id="totalAvg" style="font-size:36px;font-weight:700;color:var(--accent);font-family:var(--font-display);">${avgProgress}%</div>
             <div class="muted" style="font-size:11px;">Gemiddeld</div>
           </div>
           <div style="flex:1;">
-            <div class="progress-track"><div class="progress-fill" style="width:${avgProgress}%;"></div></div>
+            <div class="progress-track"><div class="progress-fill" id="totalBar" style="width:${avgProgress}%;"></div></div>
           </div>
           <div style="text-align:center;min-width:80px;">
-            <div style="font-size:20px;font-weight:700;color:var(--green);">${done}/${total}</div>
+            <div id="totalDone" style="font-size:20px;font-weight:700;color:var(--green);">${done}/${total}</div>
             <div class="muted" style="font-size:11px;">Afgerond</div>
           </div>
         </div>
@@ -114,6 +114,14 @@ export function bind(state,root){
         label.textContent=val+"%";
         label.style.color=val>=100?"var(--green)":val>=50?"var(--accent)":"var(--muted)";
       }
+      // Update overall progress
+      const list=state.activiteiten||[];
+      const tot=list.length;
+      const avg=tot?Math.round(list.reduce((s,a)=>s+(a.voortgang||0),0)/tot):0;
+      const dn=list.filter(a=>(a.voortgang||0)>=100).length;
+      const elAvg=root.querySelector("#totalAvg"); if(elAvg) elAvg.textContent=avg+"%";
+      const elBar=root.querySelector("#totalBar"); if(elBar) elBar.style.width=avg+"%";
+      const elDone=root.querySelector("#totalDone"); if(elDone) elDone.textContent=dn+"/"+tot;
     });
   });
 
