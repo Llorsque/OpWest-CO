@@ -147,6 +147,26 @@ select.input{cursor:pointer;} select.input option{background:var(--bg2);color:va
 .toast{position:fixed;right:20px;bottom:20px;padding:12px 18px;border-radius:var(--radius);background:var(--text);color:white;box-shadow:var(--shadow-lg);transform:translateY(12px);opacity:0;pointer-events:none;transition:200ms;font-size:13px;font-weight:500;z-index:100;}
 .toast.is-show{transform:translateY(0);opacity:1;}
 
+/* Modal */
+.modal-overlay{
+  position:fixed;inset:0;z-index:50;
+  background:rgba(0,0,0,0.35);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:40px 20px;overflow-y:auto;
+  animation:modalFadeIn 150ms ease;
+}
+.modal{
+  width:100%;max-width:1000px;
+  border-radius:var(--radius2);border:1px solid var(--border);
+  background:var(--panel-bg);box-shadow:var(--shadow-lg);
+  overflow:hidden;
+  animation:modalSlideUp 200ms ease;
+}
+.modal .panel__header{position:sticky;top:0;background:var(--panel-bg);z-index:1;border-bottom:1px solid var(--border);}
+
+@keyframes modalFadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes modalSlideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
 .login-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:var(--bg);}
 .login-card{width:100%;max-width:380px;margin:20px;border-radius:var(--radius3);border:1px solid var(--border);background:var(--panel-bg);box-shadow:var(--shadow-lg);overflow:hidden;}
 .login-brand{display:flex;gap:14px;align-items:center;padding:32px 32px 0;}

@@ -78,7 +78,9 @@ export function render(state){
       </div>
     </div>
 
-    ${state.ui.selectedId?`<div class="panel" id="clubDossier" style="margin-top:16px;">${dossier(state)}</div>`:""}
+    ${state.ui.selectedId?`<div class="modal-overlay" id="modalOverlay">
+      <div class="modal">${dossier(state)}</div>
+    </div>`:""}
   `;
 }
 
@@ -124,12 +126,17 @@ export function bind(state,root){
 
   root.querySelectorAll("[data-select-id]")?.forEach(tr=>{tr.addEventListener("click",()=>{
     state.ui.selectedId=tr.getAttribute("data-select-id");state.ui.showAdd=false;state.rerender();
-    // Scroll dossier into view
-    requestAnimationFrame(()=>{
-      const panel=document.querySelector("#clubDossier");
-      if(panel) panel.scrollIntoView({behavior:"smooth",block:"start"});
-    });
   });});
+
+  // Close modal on overlay click
+  root.querySelector("#modalOverlay")?.addEventListener("click",(e)=>{
+    if(e.target.id==="modalOverlay"){state.ui.selectedId=null;state.rerender();}
+  });
+  // Close on Escape
+  const escHandler=(e)=>{if(e.key==="Escape"&&state.ui.selectedId){state.ui.selectedId=null;state.rerender();}};
+  document.addEventListener("keydown",escHandler);
+  // Cleanup on next render (bind is called each render)
+  root._escCleanup?.(); root._escCleanup=()=>document.removeEventListener("keydown",escHandler);
 
   root.querySelector("#btnDownloadCSV")?.addEventListener("click",()=>downloadTemplate());
   root.querySelector("#fileCSV")?.addEventListener("change",async(e)=>{

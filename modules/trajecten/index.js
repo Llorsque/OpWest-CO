@@ -21,7 +21,9 @@ export function render(state){
         ${!list.length?`<div class="muted" style="font-size:13px;text-align:center;padding:20px;">Nog geen trajecten.${admin?" Klik + Nieuw traject.":""}</div>`
           :`${trjGroup("Actief",lopend,state,admin)}${trjGroup("Afronding / Gepauzeerd",afronding,state,admin)}${trjGroup("Afgerond",afgerond,state,admin)}`}
       </div></div>
-    ${state.ui.selectedTrajectId&&!state.ui.showAddTraject?`<div class="panel" id="trjDossier" style="margin-top:16px;">${trjDetail(state)}</div>`:""}
+    ${state.ui.selectedTrajectId&&!state.ui.showAddTraject?`<div class="modal-overlay" id="trjModalOverlay">
+      <div class="modal">${trjDetail(state)}</div>
+    </div>`:""}
   `;
 }
 
@@ -54,11 +56,15 @@ export function bind(state,root){
 
   root.querySelectorAll("[data-select-trj]")?.forEach(el=>{el.addEventListener("click",()=>{
     state.ui.selectedTrajectId=el.getAttribute("data-select-trj");state.ui.showAddTraject=false;state.rerender();
-    requestAnimationFrame(()=>{
-      const panel=document.querySelector("#trjDossier");
-      if(panel) panel.scrollIntoView({behavior:"smooth",block:"start"});
-    });
   });});
+
+  // Close modal on overlay click
+  root.querySelector("#trjModalOverlay")?.addEventListener("click",(e)=>{
+    if(e.target.id==="trjModalOverlay"){state.ui.selectedTrajectId=null;state.rerender();}
+  });
+  const escHandler=(e)=>{if(e.key==="Escape"&&state.ui.selectedTrajectId){state.ui.selectedTrajectId=null;state.rerender();}};
+  document.addEventListener("keydown",escHandler);
+  root._escCleanup?.(); root._escCleanup=()=>document.removeEventListener("keydown",escHandler);
   root.querySelectorAll("[data-del-trj]")?.forEach(btn=>{
     btn.addEventListener("click",(e)=>{e.stopPropagation();const id=btn.getAttribute("data-del-trj");const t=state.trajecten.find(x=>x.id===id);
       if(!t||!confirm(`Traject '${t.verenigingNaam}' verwijderen?`))return;
