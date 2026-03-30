@@ -5,7 +5,7 @@
     "thema": "Basis op orde",
     "impact": "Continuïteit en tijdsbesparing",
     "partners": "Gemeenten, sportbonden, kennisinstellingen",
-    "voortgang": 50,
+    "voortgang": 51,
     "toelichting": "Inspiratiesessies op relevante thema's zoals WBTR, verduurzaming en sociale hygiëne."
   },
   {
@@ -25,15 +25,6 @@
     "partners": "",
     "voortgang": 0,
     "toelichting": "Clubs stimuleren om gebruik te maken van externe ledenadministratie of penningmeesterschap."
-  },
-  {
-    "id": "act-bo-04",
-    "titel": "Min. 80% deelnemers geeft aan dat ondersteuning bijdraagt aan tijdsbesparing",
-    "thema": "Basis op orde",
-    "impact": "Kwaliteitsmeting",
-    "partners": "",
-    "voortgang": 0,
-    "toelichting": "Evaluatiedoelstelling: minimaal 80% van de deelnemende clubs ervaart tijdsbesparing en continuïteit."
   },
   {
     "id": "act-ci-01",
@@ -59,7 +50,7 @@
     "thema": "De club van iedereen",
     "impact": "Ledenbehoud en vitaliteit",
     "partners": "TeamFit",
-    "voortgang": 0,
+    "voortgang": 57,
     "toelichting": ""
   },
   {
@@ -77,7 +68,7 @@
     "thema": "De club van iedereen",
     "impact": "Jeugdaanwas",
     "partners": "Scholen, verenigingen",
-    "voortgang": 0,
+    "voortgang": 44,
     "toelichting": "Samenwerking tussen onderwijs en sportverenigingen via Klas naar de Club en BMO/ASM."
   },
   {
@@ -131,7 +122,7 @@
     "thema": "Opgeleid kader",
     "impact": "Kwaliteit trainingen",
     "partners": "Sportbonden",
-    "voortgang": 0,
+    "voortgang": 25,
     "toelichting": "Vakinhoudelijke scholing in overleg met de bonden."
   },
   {
@@ -140,7 +131,7 @@
     "thema": "Opgeleid kader",
     "impact": "Sociaal veilig sportklimaat",
     "partners": "Special Heroes",
-    "voortgang": 0,
+    "voortgang": 48,
     "toelichting": "Workshop Gedrag, bijvoorbeeld in samenwerking met Special Heroes."
   },
   {
@@ -176,7 +167,7 @@
     "thema": "Samenwerken met de omgeving",
     "impact": "Bewegen stimuleren",
     "partners": "",
-    "voortgang": 0,
+    "voortgang": 55,
     "toelichting": "Speerpunt Bewegen & Gezondheid."
   },
   {
@@ -185,7 +176,7 @@
     "thema": "Samenwerken met de omgeving",
     "impact": "Beleid en samenwerking",
     "partners": "Gemeente",
-    "voortgang": 0,
+    "voortgang": 38,
     "toelichting": "Speerpunt Samenwerking & beleid."
   },
   {
