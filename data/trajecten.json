@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "trj-9e1acfd1-19d3e5177a0",
+    "verenigingId": "club-korfbalvereniging-oerterp-c8b5",
+    "verenigingNaam": "Korfbalvereniging Oerterp",
+    "type": "Accommodatie",
+    "thema": "Basis op orde",
+    "programma": "Rabo ClubSupport",
+    "omschrijving": "",
+    "startDatum": "2025-09-01",
+    "verwachtEinde": "2026-01-31",
+    "status": "Afgerond",
+    "coach": "Siebe Post",
+    "financien": {
+      "totaal": 3000,
+      "bronnen": [
+        {
+          "bron": "Rabo ClubSupport",
+          "bedrag": 3000,
+          "percentage": 100
+        }
+      ]
+    },
+    "log": []
+  }
+]
