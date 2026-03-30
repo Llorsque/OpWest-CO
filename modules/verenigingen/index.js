@@ -4,10 +4,20 @@ import { downloadTemplate, parseCSV } from "../../shared/csv.js";
 
 export function meta(){ return { title:"Verenigingen", meta:"Clubs, dossiers en overzichten" }; }
 
+// Normalize text for fuzzy search: strip dots, dashes, extra spaces, lowercase
+function norm(str){ return (str||"").toLowerCase().replace(/[.\-_'"/\\]/g,"").replace(/\s+/g," ").trim(); }
+
 export function render(state){
-  const q=state.ui.q||""; const list=filter(state.verenigingen,q); const admin=state.isAdmin;
+  const q=state.ui.q||""; const admin=state.isAdmin;
+  const fSport=state.ui.fSport||""; const fPlaats=state.ui.fPlaats||""; const fGemeente=state.ui.fGemeente||"";
+  const list=filter(state.verenigingen,q,fSport,fPlaats,fGemeente);
   const total=state.verenigingen.length;
   const actief=state.verenigingen.filter(v=>v.actief!==false).length;
+
+  // Collect unique values for filters
+  const sporten=[...new Set(state.verenigingen.map(v=>v.sport).filter(Boolean))].sort();
+  const plaatsen=[...new Set(state.verenigingen.map(v=>v.plaats).filter(Boolean))].sort();
+  const gemeenten=[...new Set(state.verenigingen.map(v=>v.gemeente).filter(Boolean))].sort();
 
   return `
     ${admin?`<div class="toolbar">
@@ -37,9 +47,15 @@ export function render(state){
     </div>`:""}
 
     <div class="panel">
-      <div class="panel__header">
-        <div class="panel__title">Clubs <span class="muted" style="font-weight:400;">(${actief} actief van ${total})</span></div>
-        <input class="input" id="clubSearch" placeholder="Zoeken…" value="${esc(q)}" style="max-width:220px;flex:unset;"/>
+      <div class="panel__header" style="flex-wrap:wrap;gap:8px;">
+        <div class="panel__title">Clubs <span class="muted" style="font-weight:400;">(${list.length}${list.length!==total?" van "+total:""} · ${actief} actief)</span></div>
+        <div class="row" style="gap:6px;">
+          <input class="input" id="clubSearch" placeholder="Zoeken…" value="${esc(q)}" style="max-width:180px;flex:unset;"/>
+          <select class="input filter-select" id="fSport"><option value="">Alle sporten</option>${sporten.map(s=>`<option ${s===fSport?"selected":""}>${esc(s)}</option>`).join("")}</select>
+          <select class="input filter-select" id="fPlaats"><option value="">Alle plaatsen</option>${plaatsen.map(p=>`<option ${p===fPlaats?"selected":""}>${esc(p)}</option>`).join("")}</select>
+          <select class="input filter-select" id="fGemeente"><option value="">Alle gemeenten</option>${gemeenten.map(g=>`<option ${g===fGemeente?"selected":""}>${esc(g)}</option>`).join("")}</select>
+          ${(fSport||fPlaats||fGemeente)?`<button class="btn btn--ghost" id="btnClearFilters" style="font-size:11px;padding:6px 8px;">✕ Reset</button>`:""}
+        </div>
       </div>
       <div class="panel__body" style="padding:0;">
         <table class="table">
@@ -59,7 +75,35 @@ export function render(state){
 }
 
 export function bind(state,root){
-  root.querySelector("#clubSearch")?.addEventListener("input",e=>{state.ui.q=e.target.value;state.rerender();});
+  // SEARCH — preserve cursor position
+  const search=root.querySelector("#clubSearch");
+  if(search){
+    search.addEventListener("input",e=>{
+      state.ui.q=e.target.value;
+      const pos=e.target.selectionStart;
+      state.rerender();
+      // Restore focus and cursor after DOM rebuild
+      requestAnimationFrame(()=>{
+        const el=document.querySelector("#clubSearch");
+        if(el){el.focus();el.setSelectionRange(pos,pos);}
+      });
+    });
+    // If we have a query, keep focus (e.g. after filter change triggered rerender)
+    if(state.ui.q && document.activeElement?.id!=="clubSearch"){
+      // Don't steal focus from filters
+    }
+  }
+
+  // COLUMN FILTERS
+  ["fSport","fPlaats","fGemeente"].forEach(id=>{
+    root.querySelector("#"+id)?.addEventListener("change",e=>{
+      state.ui[id]=e.target.value;state.rerender();
+    });
+  });
+  root.querySelector("#btnClearFilters")?.addEventListener("click",()=>{
+    state.ui.fSport="";state.ui.fPlaats="";state.ui.fGemeente="";state.rerender();
+  });
+
   root.querySelectorAll("[data-select-id]")?.forEach(tr=>{tr.addEventListener("click",()=>{state.ui.selectedId=tr.getAttribute("data-select-id");state.ui.showAdd=false;state.rerender();});});
 
   root.querySelector("#btnDownloadCSV")?.addEventListener("click",()=>downloadTemplate());
@@ -171,8 +215,6 @@ function dossier(state){
       <button class="btn btn--ghost" id="btnCloseDetail">Sluiten</button>
     </div>
     <div class="panel__body">
-
-      <!-- Gegevens bewerken -->
       ${admin?`<div class="subpanel">
         <div class="subpanel__header"><strong>Gegevens</strong><button class="btn" id="btnSaveFields" style="font-size:12px;padding:5px 10px;">Bewaar</button></div>
         <div class="row">
@@ -182,95 +224,63 @@ function dossier(state){
           <select class="input" id="editActief" style="flex:0 0 110px;"><option value="true" ${v.actief!==false?"selected":""}>Actief</option><option value="false" ${v.actief===false?"selected":""}>Inactief</option></select>
           <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" id="editSwg" ${v.swg?"checked":""}/> SWG</label>
         </div>
-        <div class="row" style="margin-top:8px;">
-          <input class="input" id="editAfdelingen" placeholder="Afdelingen (bijv. Voetbal, Tennis, Turnen)" value="${esc(v.afdelingen||"")}"/>
-        </div>
+        <div class="row" style="margin-top:8px;"><input class="input" id="editAfdelingen" placeholder="Afdelingen (bijv. Voetbal, Tennis, Turnen)" value="${esc(v.afdelingen||"")}"/></div>
       </div>`:""}
-
       <div class="split">
         <div style="display:flex;flex-direction:column;gap:0;">
-          <!-- Contactpersonen -->
-          <div class="subpanel">
-            <div class="subpanel__header"><strong>Contactpersonen</strong>
-              ${admin?`<div class="row" style="gap:6px;"><button class="btn btn--ghost" id="btnAddContact" style="font-size:12px;padding:5px 10px;">+ Contact</button><button class="btn" id="btnSaveContacts" style="font-size:12px;padding:5px 10px;">Bewaar</button></div>`:""}</div>
+          <div class="subpanel"><div class="subpanel__header"><strong>Contactpersonen</strong>
+            ${admin?`<div class="row" style="gap:6px;"><button class="btn btn--ghost" id="btnAddContact" style="font-size:12px;padding:5px 10px;">+ Contact</button><button class="btn" id="btnSaveContacts" style="font-size:12px;padding:5px 10px;">Bewaar</button></div>`:""}</div>
             ${contacts.length?(admin?contacts.map((c,i)=>`<div class="row" data-contact-row="1" style="padding:4px 0;"><input class="input" data-f="rol" placeholder="Rol" value="${esc(c.rol||"")}" style="flex:0 0 100px;"/><input class="input" data-f="naam" placeholder="Naam" value="${esc(c.naam||"")}"/><input class="input" data-f="email" placeholder="E-mail" value="${esc(c.email||"")}"/><input class="input" data-f="telefoon" placeholder="Tel" value="${esc(c.telefoon||"")}" style="flex:0 0 120px;"/><button class="btn--icon-del" data-remove-contact="${i}">×</button></div>`).join("")
               :`<table class="table"><thead><tr><th>Rol</th><th>Naam</th><th>E-mail</th><th>Telefoon</th></tr></thead><tbody>${contacts.map(c=>`<tr><td>${esc(c.rol||"—")}</td><td>${esc(c.naam||"—")}</td><td>${c.email?`<a href="mailto:${esc(c.email)}" style="color:var(--accent);">${esc(c.email)}</a>`:"—"}</td><td>${c.telefoon?`<a href="tel:${esc(c.telefoon)}" style="color:var(--accent);">${esc(c.telefoon)}</a>`:"—"}</td></tr>`).join("")}</tbody></table>`)
               :`<div class="muted" style="font-size:13px;">Geen contacten.</div>`}
           </div>
-
-          <!-- Notitie -->
-          <div class="subpanel">
-            <div class="subpanel__header"><strong>Wat speelt er?</strong>${admin?`<button class="btn" id="btnSaveNote" style="font-size:12px;padding:5px 10px;">Bewaar</button>`:""}</div>
-            ${admin?`<textarea class="textarea" id="noteText" style="min-height:60px;">${esc(v.notitie||"")}</textarea>`
-              :`<div style="font-size:13px;white-space:pre-wrap;">${esc(v.notitie||"Geen notities.")}</div>`}
-          </div>
-
-          <!-- Bezoeken -->
-          <div class="subpanel">
-            <div class="subpanel__header"><strong>Bezoeken</strong><span class="muted">(${bezoeken.length})</span></div>
+          <div class="subpanel"><div class="subpanel__header"><strong>Wat speelt er?</strong>${admin?`<button class="btn" id="btnSaveNote" style="font-size:12px;padding:5px 10px;">Bewaar</button>`:""}</div>
+            ${admin?`<textarea class="textarea" id="noteText" style="min-height:60px;">${esc(v.notitie||"")}</textarea>`:`<div style="font-size:13px;white-space:pre-wrap;">${esc(v.notitie||"Geen notities.")}</div>`}</div>
+          <div class="subpanel"><div class="subpanel__header"><strong>Bezoeken</strong><span class="muted">(${bezoeken.length})</span></div>
             ${bezoeken.length?bezoeken.slice(0,10).map(b=>`<div style="display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;">
-              <div style="color:var(--accent);min-width:68px;">${formatDate(b.datum)}</div>
-              <span class="pill" style="font-size:10px;">${esc(b.type||"Bezoek")}</span>
-              <div style="flex:1;">${esc(b.notitie||"")}</div>
-            </div>`).join("")+(bezoeken.length>10?`<div class="muted" style="font-size:11px;margin-top:4px;">+ ${bezoeken.length-10} meer → <a href="#/bezoeken" style="color:var(--accent);">Alle bezoeken</a></div>`:"")
-              :`<div class="muted" style="font-size:13px;">Nog geen bezoeken. <a href="#/bezoeken" style="color:var(--accent);">Registreer een bezoek</a></div>`}
-          </div>
+              <div style="color:var(--accent);min-width:68px;">${formatDate(b.datum)}</div><span class="pill" style="font-size:10px;">${esc(b.type||"Bezoek")}</span><div style="flex:1;">${esc(b.notitie||"")}</div></div>`).join("")
+              :`<div class="muted" style="font-size:13px;">Geen bezoeken. <a href="#/bezoeken" style="color:var(--accent);">Registreer</a></div>`}</div>
         </div>
-
         <div style="display:flex;flex-direction:column;gap:0;">
-          <!-- Acties -->
-          <div class="subpanel">
-            <div class="subpanel__header"><strong>Acties</strong><span class="muted">(${acties.filter(a=>a.status!=="Afgerond").length} open)</span></div>
+          <div class="subpanel"><div class="subpanel__header"><strong>Acties</strong><span class="muted">(${acties.filter(a=>a.status!=="Afgerond").length} open)</span></div>
             ${admin?`<div class="actie-form" style="margin-bottom:8px;">
               <div class="row"><input class="input" id="actieTitel" placeholder="Actie *" style="flex:2;"/><select class="input" id="actieStatus" style="flex:0 0 100px;"><option>Open</option><option>Lopend</option><option>Afgerond</option></select></div>
               <div class="row" style="margin-top:6px;"><input class="input" id="actieDeadline" type="date" style="flex:0 0 140px;"/><input class="input" id="actieWie" placeholder="Wie?"/><button class="btn" id="btnAddActie" style="font-size:12px;padding:5px 10px;">+ Actie</button></div>
-              <textarea class="textarea" id="actieNotitie" placeholder="Toelichting" style="min-height:35px;margin-top:6px;"></textarea>
-            </div>`:""}
+              <textarea class="textarea" id="actieNotitie" placeholder="Toelichting" style="min-height:35px;margin-top:6px;"></textarea></div>`:""}
             ${acties.length?acties.map(a=>`<div class="actie-item"><div class="actie-item__header"><div style="flex:1;"><div class="actie-item__title">${esc(a.titel)}</div>${a.notitie?`<div class="actie-item__desc">${esc(a.notitie)}</div>`:""}</div>
-              <div class="row" style="gap:4px;flex-shrink:0;">${a.deadline?`<span class="pill" style="font-size:10px;">${formatDate(a.deadline)}</span>`:""}<span class="pill pill--status pill--${a.status==="Afgerond"?"done":a.status==="Lopend"?"active":"default"}" ${admin?`data-toggle-actie="${esc(a.id)}" style="cursor:pointer;"`:""} title="${admin?"Klik om status te wisselen":""}">${esc(a.status)}</span>${admin?`<button class="btn--icon-del" data-del-actie="${esc(a.id)}">×</button>`:""}</div></div></div>`).join("")
-              :`<div class="muted" style="font-size:13px;">Geen acties.</div>`}
-          </div>
-
-          <!-- Deelname bijeenkomsten -->
-          <div class="subpanel">
-            <div class="subpanel__header"><strong>Bijeenkomsten & cursussen</strong><span class="muted">(${deelnames.length})</span></div>
+              <div class="row" style="gap:4px;flex-shrink:0;">${a.deadline?`<span class="pill" style="font-size:10px;">${formatDate(a.deadline)}</span>`:""}<span class="pill pill--status pill--${a.status==="Afgerond"?"done":a.status==="Lopend"?"active":"default"}" ${admin?`data-toggle-actie="${esc(a.id)}" style="cursor:pointer;"`:""} title="${admin?"Klik om te wisselen":""}">${esc(a.status)}</span>${admin?`<button class="btn--icon-del" data-del-actie="${esc(a.id)}">×</button>`:""}</div></div></div>`).join("")
+              :`<div class="muted" style="font-size:13px;">Geen acties.</div>`}</div>
+          <div class="subpanel"><div class="subpanel__header"><strong>Bijeenkomsten</strong><span class="muted">(${deelnames.length})</span></div>
             ${deelnames.length?deelnames.map(b=>{const d=(b.deelnemers||[]).find(x=>x.verenigingId===v.id);
-              return `<div style="display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;">
-                <div style="color:var(--accent);min-width:68px;">${formatDate(b.datum)}</div>
-                <div style="flex:1;"><strong>${esc(b.titel)}</strong> <span class="pill" style="font-size:10px;">${esc(b.type)}</span></div>
-                <div>${d?.aantalPersonen||0} pers.</div>
-              </div>`;}).join("")
-              :`<div class="muted" style="font-size:13px;">Nog niet deelgenomen. <a href="#/bijeenkomsten" style="color:var(--accent);">Bijeenkomsten</a></div>`}
-          </div>
-
-          <!-- Trajecten -->
-          <div class="subpanel">
-            <div class="subpanel__header"><strong>Trajecten</strong><span class="muted">(${trajecten.length})</span></div>
-            ${trajecten.length?trajecten.map(t=>`<div style="display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;align-items:center;">
-              <div style="flex:1;"><strong>${esc(t.type||"Onbepaald")}</strong>${t.thema?" · "+esc(t.thema):""}</div>
-              <span class="pill pill--status pill--${t.status==="Lopend"||t.status==="Intake"?"active":t.status==="Afgerond"?"done":"warning"}" style="font-size:10px;">${esc(t.status)}</span>
-            </div>`).join("")
-              :`<div class="muted" style="font-size:13px;">Geen trajecten. <a href="#/trajecten" style="color:var(--accent);">Trajecten</a></div>`}
-          </div>
-
-          <!-- Logboek -->
-          <div class="subpanel">
-            <div class="subpanel__header"><strong>Logboek</strong><span class="muted">(${notities.length})</span></div>
+              return `<div style="display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;"><div style="color:var(--accent);min-width:68px;">${formatDate(b.datum)}</div><div style="flex:1;"><strong>${esc(b.titel)}</strong> <span class="pill" style="font-size:10px;">${esc(b.type)}</span></div><div>${d?.aantalPersonen||0} pers.</div></div>`;}).join("")
+              :`<div class="muted" style="font-size:13px;">Geen deelnames. <a href="#/bijeenkomsten" style="color:var(--accent);">Bijeenkomsten</a></div>`}</div>
+          <div class="subpanel"><div class="subpanel__header"><strong>Trajecten</strong><span class="muted">(${trajecten.length})</span></div>
+            ${trajecten.length?trajecten.map(t=>`<div style="display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;align-items:center;"><div style="flex:1;"><strong>${esc(t.type||"Onbepaald")}</strong>${t.thema?" · "+esc(t.thema):""}</div>
+              <span class="pill pill--status pill--${t.status==="Lopend"||t.status==="Intake"?"active":t.status==="Afgerond"?"done":"warning"}" style="font-size:10px;">${esc(t.status)}</span></div>`).join("")
+              :`<div class="muted" style="font-size:13px;">Geen trajecten. <a href="#/trajecten" style="color:var(--accent);">Trajecten</a></div>`}</div>
+          <div class="subpanel"><div class="subpanel__header"><strong>Logboek</strong><span class="muted">(${notities.length})</span></div>
             ${admin?`<div class="row" style="margin-bottom:8px;"><input class="input" id="notitieTekst" placeholder="Snelle notitie…"/><button class="btn" id="btnAddNotitie" style="font-size:12px;padding:5px 10px;">+ Log</button></div>`:""}
-            ${notities.length?notities.map(n=>`<div style="display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;">
-              <div style="color:var(--accent);min-width:68px;">${formatDate(n.datum)}</div><div style="flex:1;">${esc(n.tekst)}</div>
+            ${notities.length?notities.map(n=>`<div style="display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;"><div style="color:var(--accent);min-width:68px;">${formatDate(n.datum)}</div><div style="flex:1;">${esc(n.tekst)}</div>
               ${admin?`<button class="btn--icon-del" data-del-actie="${esc(n.id)}">×</button>`:""}</div>`).join("")
-              :`<div class="muted" style="font-size:13px;">Geen logboek.</div>`}
-          </div>
+              :`<div class="muted" style="font-size:13px;">Geen logboek.</div>`}</div>
         </div>
       </div>
     </div>`;
 }
 
-function filter(list,q){
-  q=(q||"").trim().toLowerCase();if(!q)return list;
-  return list.filter(v=>{
+/* ── FILTER — fuzzy + column filters ───────── */
+
+function filter(list,q,fSport,fPlaats,fGemeente){
+  let result=list;
+  if(fSport) result=result.filter(v=>v.sport===fSport);
+  if(fPlaats) result=result.filter(v=>v.plaats===fPlaats);
+  if(fGemeente) result=result.filter(v=>v.gemeente===fGemeente);
+  if(!q?.trim()) return result;
+
+  const nq=norm(q);
+  return result.filter(v=>{
     const c=(v.contacten||[]).map(x=>`${x.rol} ${x.naam} ${x.email} ${x.telefoon}`).join(" ");
-    return `${v.naam} ${v.sport} ${v.plaats} ${v.gemeente} ${v.afdelingen||""} ${c} ${v.notitie||""}`.toLowerCase().includes(q);
+    const hay=norm(`${v.naam} ${v.sport} ${v.plaats} ${v.gemeente} ${v.afdelingen||""} ${c} ${v.notitie||""}`);
+    return hay.includes(nq);
   });
 }
