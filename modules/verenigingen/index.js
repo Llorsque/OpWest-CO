@@ -10,7 +10,9 @@ function norm(str){ return (str||"").toLowerCase().replace(/[.\-_'"/\\]/g,"").re
 export function render(state){
   const q=state.ui.q||""; const admin=state.isAdmin;
   const fSport=state.ui.fSport||""; const fPlaats=state.ui.fPlaats||""; const fGemeente=state.ui.fGemeente||"";
-  const list=filter(state.verenigingen,q,fSport,fPlaats,fGemeente);
+  const sortCol=state.ui.sortCol||"naam"; const sortDir=state.ui.sortDir||"asc";
+  let list=filter(state.verenigingen,q,fSport,fPlaats,fGemeente);
+  list=sortList(list,sortCol,sortDir,state);
   const total=state.verenigingen.length;
   const actief=state.verenigingen.filter(v=>v.actief!==false).length;
 
@@ -60,8 +62,14 @@ export function render(state){
       <div class="panel__body" style="padding:0;">
         <table class="table">
           <thead><tr>
-            <th style="width:20%;">Naam</th><th style="width:9%;">Sport</th><th style="width:9%;">Plaats</th><th style="width:9%;">Gemeente</th>
-            <th>Contact</th><th style="width:5%;">SWG</th><th style="width:5%;">Actief</th><th style="width:5%;">Bzk</th>
+            ${sortTh("naam","Naam",sortCol,sortDir,"20%")}
+            ${sortTh("sport","Sport",sortCol,sortDir,"9%")}
+            ${sortTh("plaats","Plaats",sortCol,sortDir,"9%")}
+            ${sortTh("gemeente","Gemeente",sortCol,sortDir,"9%")}
+            ${sortTh("contact","Contact",sortCol,sortDir)}
+            ${sortTh("swg","SWG",sortCol,sortDir,"5%")}
+            ${sortTh("actief","Actief",sortCol,sortDir,"5%")}
+            ${sortTh("bzk","Bzk",sortCol,sortDir,"5%")}
             ${admin?`<th style="width:4%;"></th>`:""}
           </tr></thead>
           <tbody>${list.map(v=>tableRow(v,state)).join("")}</tbody>
@@ -102,6 +110,16 @@ export function bind(state,root){
   });
   root.querySelector("#btnClearFilters")?.addEventListener("click",()=>{
     state.ui.fSport="";state.ui.fPlaats="";state.ui.fGemeente="";state.rerender();
+  });
+
+  // COLUMN SORTING
+  root.querySelectorAll("[data-sort]")?.forEach(th=>{
+    th.addEventListener("click",()=>{
+      const col=th.getAttribute("data-sort");
+      if(state.ui.sortCol===col) state.ui.sortDir=state.ui.sortDir==="asc"?"desc":"asc";
+      else { state.ui.sortCol=col; state.ui.sortDir="asc"; }
+      state.rerender();
+    });
   });
 
   root.querySelectorAll("[data-select-id]")?.forEach(tr=>{tr.addEventListener("click",()=>{state.ui.selectedId=tr.getAttribute("data-select-id");state.ui.showAdd=false;state.rerender();});});
@@ -283,4 +301,35 @@ function filter(list,q,fSport,fPlaats,fGemeente){
     const hay=norm(`${v.naam} ${v.sport} ${v.plaats} ${v.gemeente} ${v.afdelingen||""} ${c} ${v.notitie||""}`);
     return hay.includes(nq);
   });
+}
+
+/* ── SORT ──────────────────────────────────── */
+
+function sortList(list,col,dir,state){
+  const mod=dir==="asc"?1:-1;
+  return [...list].sort((a,b)=>{
+    let va,vb;
+    switch(col){
+      case "naam": va=a.naam||""; vb=b.naam||""; break;
+      case "sport": va=a.sport||""; vb=b.sport||""; break;
+      case "plaats": va=a.plaats||""; vb=b.plaats||""; break;
+      case "gemeente": va=a.gemeente||""; vb=b.gemeente||""; break;
+      case "contact": va=a.contacten?.[0]?.naam||a.contacten?.[0]?.rol||""; vb=b.contacten?.[0]?.naam||b.contacten?.[0]?.rol||""; break;
+      case "swg": va=a.swg?1:0; vb=b.swg?1:0; return (va-vb)*mod;
+      case "actief": va=a.actief!==false?1:0; vb=b.actief!==false?1:0; return (va-vb)*mod;
+      case "bzk":
+        va=(state.bezoeken||[]).filter(x=>x.verenigingId===a.id).length;
+        vb=(state.bezoeken||[]).filter(x=>x.verenigingId===b.id).length;
+        return (va-vb)*mod;
+      default: va=a.naam||""; vb=b.naam||"";
+    }
+    return va.toString().localeCompare(vb.toString(),"nl")*mod;
+  });
+}
+
+function sortTh(col,label,activeCol,activeDir,width){
+  const isActive=activeCol===col;
+  const arrow=isActive?(activeDir==="asc"?" ↑":" ↓"):"";
+  const w=width?`width:${width};`:"";
+  return `<th data-sort="${col}" style="${w}cursor:pointer;user-select:none;" class="${isActive?"th--sorted":""}">${esc(label)}${arrow}</th>`;
 }

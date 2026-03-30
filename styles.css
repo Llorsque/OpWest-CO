@@ -113,6 +113,9 @@ select.input{cursor:pointer;} select.input option{background:var(--bg2);color:va
 .table th{font-size:11px;color:var(--muted);font-weight:600;background:var(--bg);text-transform:uppercase;letter-spacing:0.3px;position:sticky;top:0;z-index:1;}
 .table tr:hover td{background:rgba(0,0,0,0.015);}
 .table tr:last-child td{border-bottom:none;}
+.table th[data-sort]{cursor:pointer;user-select:none;transition:color 150ms;}
+.table th[data-sort]:hover{color:var(--accent);}
+.th--sorted{color:var(--accent);}
 
 .kv{display:grid;grid-template-columns:120px 1fr;gap:6px 14px;font-size:13px;}
 .kv__k{color:var(--muted);font-weight:500;}
