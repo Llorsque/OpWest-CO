@@ -21,7 +21,7 @@ const ROUTES = {
 
 const state = {
   isAdmin:false,userName:"",
-  ui:{q:"",selectedId:null,showAdd:false,showAddProject:false,showAddUpcoming:false,showAddAct:false,showAddTraject:false,selectedTrajectId:null,showAddBezoek:false,showAddBijeenkomst:false,selectedBijeenkomstId:null},
+  ui:{q:"",selectedId:null,showAdd:false,showAddProject:false,selectedProjectId:null,showAddUpcoming:false,showAddAct:false,showAddTraject:false,selectedTrajectId:null,showAddBezoek:false,showAddBijeenkomst:false,selectedBijeenkomstId:null},
   verenigingen:[],trajecten:[],projecten:[],aankomend:[],gemeente:{},activiteiten:[],resources:{},acties:[],bezoeken:[],bijeenkomsten:[],
   settings:{accounts:[],trajectTypes:[],themas:[]},
   rerender:()=>{}
@@ -76,7 +76,7 @@ async function renderRoute(){
   state.isAdmin=isAdminUser()&&isAdmin();updateBadges();
   const mod=ROUTES[route];
   if(route!=="/verenigingen"){state.ui.q="";state.ui.selectedId=null;state.ui.showAdd=false;}
-  if(route!=="/projecten")state.ui.showAddProject=false;
+  if(route!=="/projecten"){state.ui.showAddProject=false;state.ui.selectedProjectId=null;}
   if(route!=="/aankomend")state.ui.showAddUpcoming=false;
   if(route!=="/activiteiten")state.ui.showAddAct=false;
   if(route!=="/trajecten"){state.ui.showAddTraject=false;state.ui.selectedTrajectId=null;}
