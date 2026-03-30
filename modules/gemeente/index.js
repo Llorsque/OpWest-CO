@@ -28,11 +28,6 @@ export function render(state){
   state.verenigingen.filter(v=>v.actief!==false).forEach(v=>{const p=v.plaats||"Onbekend";plaatsCount[p]=(plaatsCount[p]||0)+1;});
   const plaatsEntries=Object.entries(plaatsCount).sort((a,b)=>b[1]-a[1]);
 
-      const actPlan=state.activiteiten||[];
-  const actTotal=actPlan.length;
-  const actAvg=actTotal?Math.round(actPlan.reduce((s,a)=>s+(a.voortgang||0),0)/actTotal):0;
-  const actDone=actPlan.filter(a=>(a.voortgang||0)>=100).length;
-
   return `
     <div class="dash-grid">
       ${dashTile("👥","Actieve clubs",actief,`${inactief} inactief van ${total}`,"#/verenigingen")}
@@ -40,7 +35,7 @@ export function render(state){
       ${dashTile("⚡","Open acties",actiesOpen+actiesLopend,`${actiesOpen} open, ${actiesLopend} lopend`,"#/verenigingen")}
       ${dashTile("🧩","Projecten",projectenOpen,`openstaand van ${state.projecten.length}`,"#/projecten")}
       ${dashTile("🗓️","Aankomend",state.aankomend.length,"items gepland","#/aankomend")}
-      ${dashTile("📌","Activiteitenplan",`${actAvg}%`,`${actDone}/${actTotal} afgerond`,"#/activiteiten")}
+      ${dashTile("📌","Activiteiten",state.activiteiten.length,"in het plan","#/activiteiten")}
     </div>
 
     <div class="split" style="margin-top:16px;">

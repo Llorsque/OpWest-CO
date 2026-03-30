@@ -9,6 +9,7 @@ export function render(state){
   const accounts = s.accounts||[];
   const types = s.trajectTypes||[];
   const themas = s.themas||[];
+  const bronnen = s.subsidiebronnen||[];
 
   return `
     <!-- GitHub koppeling -->
@@ -64,6 +65,19 @@ export function render(state){
           <button class="btn--icon-del" data-del-thema="${i}">x</button>
         </div>`).join("")}
         ${!themas.length?`<div class="muted" style="font-size:13px;">Geen thema's. Klik + Thema om toe te voegen.</div>`:""}
+      </div>
+    </div></div>
+
+    <!-- Subsidiebronnen -->
+    <div class="panel" style="margin-top:16px;"><div class="panel__header"><div class="panel__title">Subsidiebronnen</div>
+      <button class="btn" id="btnAddBronOptie">+ Bron</button></div>
+    <div class="panel__body">
+      <div class="tag-list" id="bronList">
+        ${bronnen.map((t,i)=>`<div class="tag-item">
+          <input class="input tag-input" data-bron-optie-idx="${i}" value="${esc(t)}"/>
+          <button class="btn--icon-del" data-del-bron-optie="${i}">x</button>
+        </div>`).join("")}
+        ${!bronnen.length?`<div class="muted" style="font-size:13px;">Geen bronnen. Klik + Bron.</div>`:""}
       </div>
     </div></div>
 
@@ -135,6 +149,21 @@ export function bind(state,root){
     });
   });
 
+  // Add subsidiebron
+  root.querySelector("#btnAddBronOptie")?.addEventListener("click",()=>{
+    state.settings.subsidiebronnen=state.settings.subsidiebronnen||[];
+    state.settings.subsidiebronnen.push("Nieuwe bron");
+    state.rerender();
+  });
+  // Delete subsidiebron
+  root.querySelectorAll("[data-del-bron-optie]")?.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const idx=Number(btn.getAttribute("data-del-bron-optie"));
+      state.settings.subsidiebronnen.splice(idx,1);
+      state.rerender();
+    });
+  });
+
   // SAVE ALL SETTINGS
   root.querySelector("#btnSaveSettings")?.addEventListener("click",async()=>{
     // Read current values from inputs
@@ -161,7 +190,12 @@ export function bind(state,root){
       const v=input.value?.trim(); if(v)themas.push(v);
     });
 
-    state.settings={accounts,trajectTypes:types,themas};
+    const subsidiebronnen=[];
+    root.querySelectorAll("[data-bron-optie-idx]")?.forEach(input=>{
+      const v=input.value?.trim(); if(v)subsidiebronnen.push(v);
+    });
+
+    state.settings={accounts,trajectTypes:types,themas,subsidiebronnen};
 
     const btn=root.querySelector("#btnSaveSettings");
     btn.disabled=true; btn.textContent="Bezig...";
