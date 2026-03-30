@@ -137,7 +137,9 @@
     "gemeente": "Opsterland",
     "contacten": [],
     "actief": true,
-    "notitie": ""
+    "notitie": "",
+    "swg": true,
+    "afdelingen": ""
   },
   {
     "id": "club-gymnastiekvereniging-tijnje-13d2",
@@ -147,7 +149,9 @@
     "gemeente": "Opsterland",
     "contacten": [],
     "actief": true,
-    "notitie": ""
+    "notitie": "",
+    "swg": true,
+    "afdelingen": ""
   },
   {
     "id": "club-hemriker-volleybal-club-7190",
@@ -357,7 +361,9 @@
     "gemeente": "Opsterland",
     "contacten": [],
     "actief": true,
-    "notitie": ""
+    "notitie": "",
+    "swg": true,
+    "afdelingen": ""
   },
   {
     "id": "club-ontspanning-door-voetbal-o-d-v-0864",
@@ -367,7 +373,9 @@
     "gemeente": "Opsterland",
     "contacten": [],
     "actief": true,
-    "notitie": ""
+    "notitie": "",
+    "swg": true,
+    "afdelingen": ""
   },
   {
     "id": "club-ouderengymnastiek-frieschepalen-0c63",
@@ -617,7 +625,9 @@
     "gemeente": "Opsterland",
     "contacten": [],
     "actief": true,
-    "notitie": ""
+    "notitie": "",
+    "swg": true,
+    "afdelingen": ""
   },
   {
     "id": "club-voetbalvereniging-blue-boys-20b7",
@@ -637,7 +647,9 @@
     "gemeente": "Opsterland",
     "contacten": [],
     "actief": true,
-    "notitie": ""
+    "notitie": "",
+    "swg": true,
+    "afdelingen": ""
   },
   {
     "id": "club-voetbalvereniging-gorredijk-16b7",
@@ -657,7 +669,9 @@
     "gemeente": "Opsterland",
     "contacten": [],
     "actief": true,
-    "notitie": ""
+    "notitie": "",
+    "swg": true,
+    "afdelingen": ""
   },
   {
     "id": "club-volleybalvereniging-bakkeveen-074f",
@@ -827,7 +841,9 @@
     "gemeente": "Opsterland",
     "contacten": [],
     "actief": true,
-    "notitie": ""
+    "notitie": "",
+    "swg": true,
+    "afdelingen": ""
   },
   {
     "id": "club-sportvereniging-tot-heil-onzer-ribbenkast-thor-volleybal-4dd3",
