@@ -3,7 +3,7 @@ import { saveData } from "../../shared/github.js";
 
 const BEZOEK_TYPES=["Bezoek","Telefonisch","Online","E-mail"];
 
-export function meta(){ return { title:"Bezoeken", meta:"Bezoekregistratie per vereniging" }; }
+export function meta(){ return { title:"Contactmomenten", meta:"Contactmomenten per vereniging" }; }
 
 export function render(state){
   const list=(state.bezoeken||[]).slice().sort((a,b)=>(b.datum||"").localeCompare(a.datum||""));
@@ -12,13 +12,13 @@ export function render(state){
 
   return `
     ${admin?`<div class="toolbar">
-      <button class="btn" id="btnAddBezoek">+ Bezoek registreren</button>
+      <button class="btn" id="btnAddBezoek">+ Contactmoment registreren</button>
       <button class="btn btn--save" id="btnSaveGitHub">Opslaan naar GitHub</button>
     </div>`:""}
 
     ${state.ui.showAddBezoek?`
     <div class="panel" style="margin-bottom:16px;border-color:var(--accent);">
-      <div class="panel__header"><div class="panel__title">Nieuw bezoek</div>
+      <div class="panel__header"><div class="panel__title">Nieuw contactmoment</div>
         <button class="btn btn--ghost" id="btnCancelBezoek">Annuleren</button></div>
       <div class="panel__body">
         <div class="row">
@@ -38,7 +38,7 @@ export function render(state){
 
     <div class="panel">
       <div class="panel__header">
-        <div class="panel__title">Bezoeken <span class="muted" style="font-weight:400;">(${list.length})</span></div>
+        <div class="panel__title">Contactmomenten <span class="muted" style="font-weight:400;">(${list.length})</span></div>
       </div>
       <div class="panel__body" style="padding:0;">
         ${list.length?`<table class="table">
@@ -53,7 +53,7 @@ export function render(state){
               ${admin?`<td><button class="btn--icon-del" data-del="${esc(b.id)}">×</button></td>`:""}
             </tr>`;
           }).join("")}</tbody>
-        </table>`:`<div class="muted" style="padding:20px;text-align:center;">Nog geen bezoeken geregistreerd.</div>`}
+        </table>`:`<div class="muted" style="padding:20px;text-align:center;">Nog geen contactmomenten geregistreerd.</div>`}
       </div>
     </div>
   `;
@@ -76,13 +76,13 @@ export function bind(state,root){
       notitie:root.querySelector("#bzNotitie")?.value?.trim()||""
     });
     state.ui.showAddBezoek=false;
-    toast("Bezoek geregistreerd.");state.rerender();
+    toast("Contactmoment geregistreerd.");state.rerender();
   });
 
   root.querySelectorAll("[data-del]")?.forEach(btn=>{
     btn.addEventListener("click",()=>{
       const id=btn.getAttribute("data-del");
-      if(!confirm("Bezoek verwijderen?"))return;
+      if(!confirm("Contactmoment verwijderen?"))return;
       state.bezoeken=state.bezoeken.filter(x=>x.id!==id);
       toast("Verwijderd.");state.rerender();
     });

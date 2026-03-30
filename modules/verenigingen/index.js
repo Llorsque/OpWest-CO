@@ -69,7 +69,7 @@ export function render(state){
             ${sortTh("contact","Contact",sortCol,sortDir)}
             ${sortTh("swg","SWG",sortCol,sortDir,"5%")}
             ${sortTh("actief","Actief",sortCol,sortDir,"5%")}
-            ${sortTh("bzk","Bzk",sortCol,sortDir,"5%")}
+            ${sortTh("cnt","Cnt",sortCol,sortDir,"5%")}
             ${admin?`<th style="width:4%;"></th>`:""}
           </tr></thead>
           <tbody>${list.map(v=>tableRow(v,state)).join("")}</tbody>
@@ -268,10 +268,10 @@ function dossier(state){
           </div>
           <div class="subpanel"><div class="subpanel__header"><strong>Wat speelt er?</strong>${admin?`<button class="btn" id="btnSaveNote" style="font-size:12px;padding:5px 10px;">Bewaar</button>`:""}</div>
             ${admin?`<textarea class="textarea" id="noteText" style="min-height:60px;">${esc(v.notitie||"")}</textarea>`:`<div style="font-size:13px;white-space:pre-wrap;">${esc(v.notitie||"Geen notities.")}</div>`}</div>
-          <div class="subpanel"><div class="subpanel__header"><strong>Bezoeken</strong><span class="muted">(${bezoeken.length})</span></div>
+          <div class="subpanel"><div class="subpanel__header"><strong>Contactmomenten</strong><span class="muted">(${bezoeken.length})</span></div>
             ${bezoeken.length?bezoeken.slice(0,10).map(b=>`<div style="display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;">
               <div style="color:var(--accent);min-width:68px;">${formatDate(b.datum)}</div><span class="pill" style="font-size:10px;">${esc(b.type||"Bezoek")}</span><div style="flex:1;">${esc(b.notitie||"")}</div></div>`).join("")
-              :`<div class="muted" style="font-size:13px;">Geen bezoeken. <a href="#/bezoeken" style="color:var(--accent);">Registreer</a></div>`}</div>
+              :`<div class="muted" style="font-size:13px;">Geen contactmomenten. <a href="#/bezoeken" style="color:var(--accent);">Registreer</a></div>`}</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:0;">
           <div class="subpanel"><div class="subpanel__header"><strong>Acties</strong><span class="muted">(${acties.filter(a=>a.status!=="Afgerond").length} open)</span></div>
@@ -331,7 +331,7 @@ function sortList(list,col,dir,state){
       case "contact": va=a.contacten?.[0]?.naam||a.contacten?.[0]?.rol||""; vb=b.contacten?.[0]?.naam||b.contacten?.[0]?.rol||""; break;
       case "swg": va=a.swg?1:0; vb=b.swg?1:0; return (va-vb)*mod;
       case "actief": va=a.actief!==false?1:0; vb=b.actief!==false?1:0; return (va-vb)*mod;
-      case "bzk":
+      case "cnt":
         va=(state.bezoeken||[]).filter(x=>x.verenigingId===a.id).length;
         vb=(state.bezoeken||[]).filter(x=>x.verenigingId===b.id).length;
         return (va-vb)*mod;
