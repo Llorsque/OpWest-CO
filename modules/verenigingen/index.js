@@ -11,8 +11,9 @@ function norm(str){ return (str||"").toLowerCase().replace(/[.\-_'"/\\]/g,"").re
 export function render(state){
   const q=state.ui.q||""; const admin=state.isAdmin;
   const fSport=state.ui.fSport||""; const fPlaats=state.ui.fPlaats||""; const fGemeente=state.ui.fGemeente||"";
+  const hideInactief=state.ui.hideInactief||false;
   const sortCol=state.ui.sortCol||"naam"; const sortDir=state.ui.sortDir||"asc";
-  let list=filter(state.verenigingen,q,fSport,fPlaats,fGemeente);
+  let list=filter(state.verenigingen,q,fSport,fPlaats,fGemeente,hideInactief);
   list=sortList(list,sortCol,sortDir,state);
   const total=state.verenigingen.length;
   const actief=state.verenigingen.filter(v=>v.actief!==false).length;
@@ -58,20 +59,22 @@ export function render(state){
           <select class="input filter-select" id="fSport"><option value="">Alle sporten</option>${sporten.map(s=>`<option ${s===fSport?"selected":""}>${esc(s)}</option>`).join("")}</select>
           <select class="input filter-select" id="fPlaats"><option value="">Alle plaatsen</option>${plaatsen.map(p=>`<option ${p===fPlaats?"selected":""}>${esc(p)}</option>`).join("")}</select>
           <select class="input filter-select" id="fGemeente"><option value="">Alle gemeenten</option>${gemeenten.map(g=>`<option ${g===fGemeente?"selected":""}>${esc(g)}</option>`).join("")}</select>
-          ${(fSport||fPlaats||fGemeente)?`<button class="btn btn--ghost" id="btnClearFilters" style="font-size:11px;padding:6px 8px;">✕ Reset</button>`:""}
+          <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer;white-space:nowrap;"><input type="checkbox" id="hideInactief" ${hideInactief?"checked":""}/> Verberg inactief</label>
+          ${(fSport||fPlaats||fGemeente||hideInactief)?`<button class="btn btn--ghost" id="btnClearFilters" style="font-size:11px;padding:6px 8px;">✕ Reset</button>`:""}
         </div>
       </div>
       <div class="panel__body" style="padding:0;">
         <table class="table">
           <thead><tr>
-            ${sortTh("naam","Naam",sortCol,sortDir,"20%")}
-            ${sortTh("sport","Sport",sortCol,sortDir,"9%")}
-            ${sortTh("plaats","Plaats",sortCol,sortDir,"9%")}
-            ${sortTh("gemeente","Gemeente",sortCol,sortDir,"9%")}
+            ${sortTh("naam","Naam",sortCol,sortDir,"18%")}
+            ${sortTh("sport","Sport",sortCol,sortDir,"8%")}
+            ${sortTh("plaats","Plaats",sortCol,sortDir,"8%")}
+            ${sortTh("gemeente","Gemeente",sortCol,sortDir,"8%")}
+            ${sortTh("locatie","Locatie",sortCol,sortDir,"10%")}
             ${sortTh("contact","Contact",sortCol,sortDir)}
             ${sortTh("swg","SWG",sortCol,sortDir,"5%")}
             ${sortTh("actief","Actief",sortCol,sortDir,"5%")}
-            ${sortTh("cnt","Cnt",sortCol,sortDir,"5%")}
+            ${sortTh("cnt","Cnt",sortCol,sortDir,"4%")}
             ${admin?`<th style="width:4%;"></th>`:""}
           </tr></thead>
           <tbody>${list.map(v=>tableRow(v,state)).join("")}</tbody>
@@ -113,7 +116,12 @@ export function bind(state,root){
     });
   });
   root.querySelector("#btnClearFilters")?.addEventListener("click",()=>{
-    state.ui.fSport="";state.ui.fPlaats="";state.ui.fGemeente="";state.rerender();
+    state.ui.fSport="";state.ui.fPlaats="";state.ui.fGemeente="";state.ui.hideInactief=false;state.rerender();
+  });
+
+  // Hide inactive toggle
+  root.querySelector("#hideInactief")?.addEventListener("change",(e)=>{
+    state.ui.hideInactief=e.target.checked;state.rerender();
   });
 
   // COLUMN SORTING
@@ -235,6 +243,7 @@ function tableRow(v,state){
   return `<tr data-select-id="${esc(v.id)}" style="cursor:pointer;${isSel?"background:var(--accent-light);":""}${!isActief?"opacity:0.5;":""}">
     <td><strong>${esc(v.naam)}</strong>${v.afdelingen?`<div class="muted" style="font-size:11px;">${esc(v.afdelingen)}</div>`:""}</td>
     <td>${esc(v.sport||"")}</td><td>${esc(v.plaats||"")}</td><td>${esc(v.gemeente||"")}</td>
+    <td style="font-size:12px;">${esc(v.locatie||"")}</td>
     <td style="font-size:12px;">${first?.naam||first?.rol||"—"}</td>
     <td>${admin?`<button class="pill pill--status ${v.swg?"pill--active":"pill--paused"}" data-toggle-swg="${esc(v.id)}" style="cursor:pointer;">${v.swg?"Ja":"Nee"}</button>`:`<span class="pill pill--status ${v.swg?"pill--active":"pill--paused"}">${v.swg?"Ja":"Nee"}</span>`}</td>
     <td>${admin?`<button class="pill pill--status ${isActief?"pill--active":"pill--paused"}" data-toggle-actief="${esc(v.id)}" style="cursor:pointer;">${isActief?"Ja":"Nee"}</button>`:`<span class="pill pill--status ${isActief?"pill--active":"pill--paused"}">${isActief?"Ja":"Nee"}</span>`}</td>
@@ -323,8 +332,9 @@ function dossier(state){
 
 /* ── FILTER — fuzzy + column filters ───────── */
 
-function filter(list,q,fSport,fPlaats,fGemeente){
+function filter(list,q,fSport,fPlaats,fGemeente,hideInactief){
   let result=list;
+  if(hideInactief) result=result.filter(v=>v.actief!==false);
   if(fSport) result=result.filter(v=>v.sport===fSport);
   if(fPlaats) result=result.filter(v=>v.plaats===fPlaats);
   if(fGemeente) result=result.filter(v=>v.gemeente===fGemeente);
@@ -333,7 +343,7 @@ function filter(list,q,fSport,fPlaats,fGemeente){
   const nq=norm(q);
   return result.filter(v=>{
     const c=(v.contacten||[]).map(x=>`${x.rol} ${x.naam} ${x.email} ${x.telefoon}`).join(" ");
-    const hay=norm(`${v.naam} ${v.sport} ${v.plaats} ${v.gemeente} ${v.afdelingen||""} ${c} ${v.notitie||""}`);
+    const hay=norm(`${v.naam} ${v.sport} ${v.plaats} ${v.gemeente} ${v.locatie||""} ${v.sportbond||""} ${v.afdelingen||""} ${c} ${v.notitie||""}`);
     return hay.includes(nq);
   });
 }
@@ -349,6 +359,7 @@ function sortList(list,col,dir,state){
       case "sport": va=a.sport||""; vb=b.sport||""; break;
       case "plaats": va=a.plaats||""; vb=b.plaats||""; break;
       case "gemeente": va=a.gemeente||""; vb=b.gemeente||""; break;
+      case "locatie": va=a.locatie||""; vb=b.locatie||""; break;
       case "contact": va=a.contacten?.[0]?.naam||a.contacten?.[0]?.rol||""; vb=b.contacten?.[0]?.naam||b.contacten?.[0]?.rol||""; break;
       case "swg": va=a.swg?1:0; vb=b.swg?1:0; return (va-vb)*mod;
       case "actief": va=a.actief!==false?1:0; vb=b.actief!==false?1:0; return (va-vb)*mod;

@@ -1,23 +1,8 @@
 {
   "accounts": [
-    {
-      "login": "Admin",
-      "naam": "Admin",
-      "password": "Welkom01!",
-      "role": "admin"
-    },
-    {
-      "login": "Justin",
-      "naam": "Justin",
-      "password": "Welkom01!",
-      "role": "viewer"
-    },
-    {
-      "login": "Amee",
-      "naam": "Amee",
-      "password": "OpWest01!",
-      "role": "viewer"
-    }
+    { "login": "Admin", "password": "Welkom01!", "role": "admin", "naam": "Admin" },
+    { "login": "Justin", "password": "Welkom01!", "role": "viewer", "naam": "Justin" },
+    { "login": "Amee", "password": "OpWest01!", "role": "viewer", "naam": "Amee" }
   ],
   "trajectTypes": [
     "Bestuurlijk",

@@ -41,6 +41,7 @@ export async function fetchAirtableRecords(config){
       }
       if(offset) params.set("offset", offset);
       params.set("pageSize", "100");
+      params.set("cellFormat", "string");
 
       const url = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(table)}?${params.toString()}`;
 
