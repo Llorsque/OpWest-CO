@@ -1,23 +1,8 @@
 {
   "accounts": [
-    {
-      "login": "Admin",
-      "naam": "Admin",
-      "password": "Welkom01!",
-      "role": "admin"
-    },
-    {
-      "login": "Justin",
-      "naam": "Justin",
-      "password": "Welkom01!",
-      "role": "viewer"
-    },
-    {
-      "login": "Amee",
-      "naam": "Amee",
-      "password": "OpWest01!",
-      "role": "viewer"
-    }
+    { "login": "Admin", "password": "Welkom01!", "role": "admin", "naam": "Admin" },
+    { "login": "Justin", "password": "Welkom01!", "role": "viewer", "naam": "Justin" },
+    { "login": "Amee", "password": "OpWest01!", "role": "viewer", "naam": "Amee" }
   ],
   "trajectTypes": [
     "Bestuurlijk",
@@ -27,8 +12,7 @@
     "Vrijwilligers",
     "Fusie/samenwerking",
     "Vitaliteitscan",
-    "Anders",
-    "Trajectbegeleiding"
+    "Anders"
   ],
   "themas": [
     "Basis op orde",
@@ -47,12 +31,23 @@
     "Sportfonds",
     "NOC*NSF",
     "Eigen middelen",
-    "Anders",
-    "Lokaal Sportakkoord"
+    "Anders"
   ],
   "programmaOpties": [
     "Rabo ClubSupport",
-    "Overig",
-    "ClubKaderCoach"
-  ]
+    "Overig"
+  ],
+  "airtable": {
+    "baseId": "appqDo8rNr0ucDy6R",
+    "table": "Aanbieders",
+    "filterFormula": "OR({Gemeente (ADHOC)}=\"OPSTERLAND\",{Gemeente (ADHOC)}=\"WESTSTELLINGWERF\")",
+    "fieldMap": {
+      "naam": "Naam KVK (ADHOC)",
+      "sport": "Type sport",
+      "plaats": "Bezoeklocatie plaats(en)",
+      "gemeente": "Gemeente (ADHOC)",
+      "locatie": "Bezoeklocatie(s)",
+      "sportbond": "Sportbond"
+    }
+  }
 }

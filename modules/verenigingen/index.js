@@ -1,6 +1,7 @@
 import { esc, uid, toast, formatDate } from "../../shared/utils.js";
 import { saveData } from "../../shared/github.js";
 import { downloadTemplate, parseCSV } from "../../shared/csv.js";
+import { fetchAirtableRecords, mergeAirtableRecords, getAirtableToken } from "../../shared/airtable.js";
 
 export function meta(){ return { title:"Verenigingen", meta:"Clubs, dossiers en overzichten" }; }
 
@@ -27,6 +28,7 @@ export function render(state){
         <button class="btn" id="btnAddClub">+ Nieuwe club</button>
         <button class="btn btn--ghost" id="btnDownloadCSV">📥 Sjabloon</button>
         <label class="btn btn--ghost filelabel">📤 CSV<input type="file" id="fileCSV" accept=".csv" hidden/></label>
+        ${getAirtableToken()&&state.settings?.airtable?.baseId?`<button class="btn btn--ghost" id="btnSyncAirtable">🔄 Sync Airtable</button>`:""}
       </div>
       <button class="btn btn--save" id="btnSaveGitHub">Opslaan naar GitHub</button>
     </div>`:""}
@@ -148,6 +150,25 @@ export function bind(state,root){
     toast(`${added} clubs toegevoegd.`);e.target.value="";state.rerender();
   });
 
+  // Airtable sync
+  root.querySelector("#btnSyncAirtable")?.addEventListener("click",async()=>{
+    if(!confirm("Airtable sync vervangt de clublijst met de actuele data uit Airtable.\n\nJe handmatige gegevens (SWG, actief, contacten, notities, acties) blijven behouden voor bestaande clubs.\n\nClubs die niet meer in Airtable staan worden verwijderd.\n\nDoorgaan?")) return;
+    const btn=root.querySelector("#btnSyncAirtable");
+    btn.disabled=true; btn.textContent="Synchroniseren...";
+    const at=state.settings?.airtable||{};
+    const fields=Object.values(at.fieldMap||{}).filter(Boolean);
+    const result=await fetchAirtableRecords({baseId:at.baseId,table:at.table,filterFormula:at.filterFormula,fields});
+    if(!result.ok){
+      toast("✗ Airtable fout: "+result.error);
+      btn.disabled=false; btn.textContent="🔄 Sync Airtable"; return;
+    }
+    const stats=mergeAirtableRecords(result.records,state.verenigingen,at.fieldMap||{});
+    state.verenigingen=stats.newList;
+    toast(`✓ Sync: ${stats.added} nieuw, ${stats.updated} bijgewerkt, ${stats.removed} verwijderd. Klik Opslaan naar GitHub.`);
+    btn.disabled=false; btn.textContent="🔄 Sync Airtable";
+    state.rerender();
+  });
+
   root.querySelector("#btnAddClub")?.addEventListener("click",()=>{state.ui.showAdd=true;state.ui.selectedId=null;state.rerender();});
   root.querySelector("#btnCancelAdd")?.addEventListener("click",()=>{state.ui.showAdd=false;state.rerender();});
   root.querySelector("#btnCreateClub")?.addEventListener("click",()=>{
@@ -242,7 +263,7 @@ function dossier(state){
           ${v.swg?`<span class="pill pill--active" style="font-size:10px;vertical-align:middle;margin-left:6px;">SWG</span>`:""}
           ${v.actief===false?`<span class="pill pill--paused" style="font-size:10px;vertical-align:middle;margin-left:6px;">Inactief</span>`:""}
         </div>
-        <div class="muted" style="font-size:12px;">${[v.sport,v.plaats,v.gemeente].filter(Boolean).join(" · ")}${v.afdelingen?" · Afd: "+esc(v.afdelingen):""}</div>
+        <div class="muted" style="font-size:12px;">${[v.sport,v.plaats,v.gemeente].filter(Boolean).join(" · ")}${v.sportbond?" · "+esc(v.sportbond):""}${v.afdelingen?" · Afd: "+esc(v.afdelingen):""}</div>
       </div>
       <button class="btn btn--ghost" id="btnCloseDetail">Sluiten</button>
     </div>
