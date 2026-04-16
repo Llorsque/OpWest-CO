@@ -637,7 +637,9 @@
     "gemeente": "Opsterland",
     "contacten": [],
     "actief": true,
-    "notitie": ""
+    "notitie": "",
+    "swg": false,
+    "afdelingen": ""
   },
   {
     "id": "club-voetbalvereniging-de-sweach-ccb1",
